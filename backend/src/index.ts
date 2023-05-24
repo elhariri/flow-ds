@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
-import { ServerSuccessfullResponse } from './index.types';
+import express, { Request, Response } from "express";
+import cors from "cors";
+import { ServerSuccessfullResponse } from "./index.types";
 
 const app = express();
 const port = 3000;
@@ -8,7 +8,7 @@ const port = 3000;
 app.use(cors());
 
 // Route handler for GET /
-app.get('/', (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response) => {
   const data: ServerSuccessfullResponse = {
     success: true,
     body: {
@@ -20,7 +20,7 @@ app.get('/', (req: Request, res: Response) => {
           unit_price: 100,
           num_shares: 10,
           total: 1000,
-          portfolio_amount: 1000
+          portfolio_amount: 1000,
         },
         {
           date: "2020-01-02",
@@ -29,14 +29,14 @@ app.get('/', (req: Request, res: Response) => {
           unit_price: 200,
           num_shares: 5,
           total: 1000,
-          portfolio_amount: 2000
+          portfolio_amount: 2000,
         },
       ],
       executionTime: {
         seconds: 50,
-        minutes: 0
-      }
-    }
+        minutes: 0,
+      },
+    },
   };
 
   res.json(data);

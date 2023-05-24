@@ -1,0 +1,5 @@
+tailwind.config.js
+vite.config.ts
+babel.config.cjs
+jest-setup.ts
+jest.config.ts
