@@ -28,7 +28,7 @@ function App() {
           <div className="flex-1 overflow-y-scroll">
             <TransactionsTable
               loading={loading}
-              transactions={response === null ? [] : response.body.transactions}
+              transactions={response === null ? [] : response.transactions}
             />
           </div>
 

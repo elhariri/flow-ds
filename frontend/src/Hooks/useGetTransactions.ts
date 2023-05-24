@@ -1,23 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ServerSuccessfullResponse } from "../App.types";
+import { ServerSuccessfullResponseBody } from "../App.types";
 
 const useGetTransactions = (): {
   loading: boolean;
   error: unknown;
-  response: ServerSuccessfullResponse | null;
+  response: ServerSuccessfullResponseBody | null;
 } => {
   const [isServerCallLoading, setIfServerCallLoading] = useState(true);
 
   const [error, setError] = useState<unknown>(null);
-  const [response, setResponse] = useState<ServerSuccessfullResponse | null>(
-    null
-  );
+  const [response, setResponse] =
+    useState<ServerSuccessfullResponseBody | null>(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const { status, data } = await axios.get("/");
+        const { status, data } = await axios.get("http://localhost:3000/");
 
         if (status === 200 && data.success) {
           setResponse(data.body);
