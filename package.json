@@ -1,0 +1,11 @@
+{
+  "name": "flow-ds",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "abdou",
+  "license": "ISC"
+}
