@@ -5,9 +5,10 @@ import { ServerSuccessfullResponse } from "./index.types";
 const app = express();
 const port = 3000;
 
+// Disable CORS for development
 app.use(cors());
 
-// Route handler for GET /
+// Default router handler
 app.get("/", (req: Request, res: Response) => {
   const data: ServerSuccessfullResponse = {
     success: true,
@@ -44,5 +45,6 @@ app.get("/", (req: Request, res: Response) => {
 
 // Start the server
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server is running on port ${port}`);
 });
