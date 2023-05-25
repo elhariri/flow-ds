@@ -1,5 +1,5 @@
 import { TransactionCompany } from "../../../index.types";
-import Action from "../Action/Action";
+import Decision from "../Decision/Decision";
 
 class Portfolio {
   private cash: number = 100000;
@@ -24,7 +24,7 @@ class Portfolio {
   }
 
   buyShares(name: TransactionCompany, numShares: number, unitPrice: number) {
-    Action.testIfValid("ACHAT", name, numShares, unitPrice);
+    Decision.testIfValid("ACHAT", name, numShares, unitPrice);
 
     const total = numShares * unitPrice;
     this.withdrawCash(total);
@@ -32,7 +32,7 @@ class Portfolio {
   }
 
   sellShares(name: TransactionCompany, numShares: number, unitPrice: number) {
-    Action.testIfValid("VENTE", name, numShares, unitPrice);
+    Decision.testIfValid("VENTE", name, numShares, unitPrice);
 
     const total = numShares * unitPrice;
     if (this.shares[name] < numShares) {
