@@ -1,6 +1,6 @@
 import { TransactionCompany, TransactionType } from "../../../index.types";
 
-class Action {
+class Decision {
   static testIfValid(
     type: TransactionType,
     name: TransactionCompany,
@@ -32,4 +32,4 @@ class Action {
   }
 }
 
-export default Action;
+export default Decision;
