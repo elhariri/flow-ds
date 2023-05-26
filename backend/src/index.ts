@@ -1,4 +1,14 @@
-import express, { Request, Response } from "express";
+import fs from "fs";
+import StockProfitMaximizer from "./solution/V0-naive/StockProfitMaximizer/StockProfitMaximizer";
+
+const AmazonStockPrices = JSON.parse(
+  fs.readFileSync("data/AmazonStockPrices.json", "utf8")
+);
+const GoogleStockPrices = JSON.parse(
+  fs.readFileSync("data/GoogleStockPrices.json", "utf8")
+);
+
+/* import express, { Request, Response } from "express";
 import cors from "cors";
 import { ServerSuccessfullResponse } from "./index.types";
 
@@ -48,3 +58,11 @@ app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server is running on port ${port}`);
 });
+ */
+
+const profit = StockProfitMaximizer.findMaxProfit(
+  GoogleStockPrices,
+  AmazonStockPrices
+);
+
+fs.writeFileSync("./", JSON.stringify(profit));
