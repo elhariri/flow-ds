@@ -1,6 +1,5 @@
-import { TransactionCompany, TransactionType } from "../../../index.types";
 import Portfolio from "../Portfolio/Portfolio";
-import { SharesDayPrices } from "./DecisionsEnumerator.types";
+import { Possibility, SharesDayPrices } from "./DecisionsEnumerator.types";
 
 class DecisionsEnumerator {
   // get all the poosible decisions from a portfolio and a set of prices
@@ -8,11 +7,7 @@ class DecisionsEnumerator {
     portfolio: Portfolio,
     sharesPrices: SharesDayPrices
   ) {
-    const possibilities: {
-      type: TransactionType;
-      share: TransactionCompany;
-      amount: number;
-    }[][] = [];
+    const possibilities: Possibility[][] = [];
     const maximumBuyableGoogleShares = Math.floor(
       portfolio.cashAmount / sharesPrices.GOOGLE.buyPrice
     );

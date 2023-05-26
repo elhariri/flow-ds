@@ -44,7 +44,8 @@ class Ledger {
   }
 
   get allEntries(): Transaction[] {
-    return JSON.parse(JSON.stringify(this.entries));
+    const entriesDeepCopy = JSON.parse(JSON.stringify(this.entries));
+    return entriesDeepCopy;
   }
 }
 

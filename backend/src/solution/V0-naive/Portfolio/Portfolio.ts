@@ -1,13 +1,26 @@
+import Config from "../../../config";
 import { TransactionCompany } from "../../../index.types";
 import Decision from "../Decision/Decision";
+import Ledger from "../Ledger/Leger";
+import { SharesState } from "./Porfolio.types";
 
 class Portfolio {
-  private cash: number = 100000;
+  private cash: number;
 
-  private shares: { GOOGLE: number; AMAZON: number } = {
-    GOOGLE: 0,
-    AMAZON: 0,
-  };
+  private shares: SharesState;
+
+  private ledger: Ledger = new Ledger();
+
+  constructor(
+    amount: number = Config.InitialInvestment,
+    shares: SharesState = {
+      GOOGLE: 0,
+      AMAZON: 0,
+    }
+  ) {
+    this.cash = amount;
+    this.shares = shares;
+  }
 
   addCash(amount: number) {
     if (amount < 0) {
@@ -16,42 +29,100 @@ class Portfolio {
     this.cash += amount;
   }
 
-  withdrawCash(amount: number) {
+  withdrawCash(amount: number): void {
     if (amount > this.cash) {
       throw new Error(`Not enough cash to withdraw ${amount}`);
     }
     this.cash -= amount;
   }
 
-  buyShares(name: TransactionCompany, numShares: number, unitPrice: number) {
+  buyShares(
+    name: TransactionCompany,
+    numShares: number,
+    unitPrice: number,
+    date: number
+  ): void {
     Decision.testIfValid("ACHAT", name, numShares, unitPrice);
 
     const total = numShares * unitPrice;
     this.withdrawCash(total);
-    this.shares[name] = (this.shares[name] || 0) + numShares;
+
+    this.shares[name] += numShares;
+
+    this.ledger.addEntry(
+      date,
+      "ACHAT",
+      name,
+      numShares,
+      unitPrice,
+      this.cashAmount
+    );
   }
 
-  sellShares(name: TransactionCompany, numShares: number, unitPrice: number) {
+  sellShares(
+    name: TransactionCompany,
+    numShares: number,
+    unitPrice: number,
+    date: number
+  ): void {
     Decision.testIfValid("VENTE", name, numShares, unitPrice);
 
-    const total = numShares * unitPrice;
     if (this.shares[name] < numShares) {
       throw new Error(`Not enough shares to sell ${numShares}`);
     }
+
+    const total = numShares * unitPrice;
     this.addCash(total);
+
     this.shares[name] -= numShares;
+
+    this.ledger.addEntry(
+      date,
+      "VENTE",
+      name,
+      numShares,
+      unitPrice,
+      this.cashAmount
+    );
   }
 
-  get cashAmount() {
+  sellAllShares(
+    googleSellPrice: number,
+    amazonSellPrice: number,
+    date: number
+  ) {
+    if (this.googleShares > 0) {
+      this.sellShares("GOOGLE", this.googleShares, googleSellPrice, date);
+    }
+    if (this.amazonShares > 0) {
+      this.sellShares("AMAZON", this.amazonShares, amazonSellPrice, date);
+    }
+  }
+
+  getProfit(): number {
+    return this.cashAmount - Config.InitialInvestment;
+  }
+
+  clone(): Portfolio {
+    const sharesDeepCopy = JSON.parse(JSON.stringify(this.shares));
+
+    return new Portfolio(this.cash, sharesDeepCopy);
+  }
+
+  get cashAmount(): number {
     return this.cash;
   }
 
-  get googleShares() {
+  get googleShares(): number {
     return this.shares.GOOGLE;
   }
 
-  get amazonShares() {
+  get amazonShares(): number {
     return this.shares.AMAZON;
+  }
+
+  get entries() {
+    return this.ledger.allEntries;
   }
 }
 

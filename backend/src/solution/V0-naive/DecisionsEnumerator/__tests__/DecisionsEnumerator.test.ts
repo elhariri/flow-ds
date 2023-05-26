@@ -105,7 +105,7 @@ it("should enumerate all possible decisions given the but and sell prices of bot
   expect(possibilities3).toEqual(expect.arrayContaining(expectedResult3));
   expect(possibilities3.length).toEqual(expectedResult3.length);
 
-  portfolio.buyShares("GOOGLE", 1, prices3.GOOGLE.buyPrice);
+  portfolio.buyShares("GOOGLE", 1, prices3.GOOGLE.buyPrice, 1234);
 
   const possibilities4 = DecisionsEnumerator.possibilitiesFrom(
     portfolio,
@@ -167,7 +167,7 @@ it("should enumerate all possible decisions given the but and sell prices of bot
   expect(comparePossibilities(possibilities4, expectedResult4)).toEqual(true);
   expect(possibilities4.length).toEqual(expectedResult4.length);
 
-  portfolio.buyShares("AMAZON", 1, prices3.GOOGLE.buyPrice);
+  portfolio.buyShares("AMAZON", 1, prices3.GOOGLE.buyPrice, 1234);
 
   const possibilities5 = DecisionsEnumerator.possibilitiesFrom(
     portfolio,

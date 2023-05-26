@@ -1,5 +1,10 @@
+import Config from "./config";
+import StockPrices from "./data/AmazonStockPrices.json";
+
+export type DailySharePrices = (typeof StockPrices)[0];
+
 export type TransactionType = "ACHAT" | "VENTE";
-export type TransactionCompany = "GOOGLE" | "AMAZON";
+export type TransactionCompany = (typeof Config.Stocks)[number];
 
 export type ExecutionTime = {
   seconds: number;
