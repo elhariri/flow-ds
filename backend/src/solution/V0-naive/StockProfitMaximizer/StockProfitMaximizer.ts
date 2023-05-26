@@ -1,7 +1,7 @@
 import { DailySharePrices } from "../../../index.types";
 import DecisionsEnumerator from "../DecisionsEnumerator/DecisionsEnumerator";
 import { Possibility } from "../DecisionsEnumerator/DecisionsEnumerator.types";
-import Portfolio from "../Portfolio/Portfolio";
+import Portfolio from "../../Shared/Portfolio/Portfolio";
 import { DayPrices, MaximizerOutput } from "./StockProfitMaximizer.types";
 
 class StockProfitMaximizer {

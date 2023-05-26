@@ -1,4 +1,4 @@
-import Portfolio from "../Portfolio/Portfolio";
+import Portfolio from "../../Shared/Portfolio/Portfolio";
 import { Possibility, SharesDayPrices } from "./DecisionsEnumerator.types";
 
 class DecisionsEnumerator {

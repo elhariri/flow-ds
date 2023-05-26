@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,7 +9,7 @@ html {
   margin: 0;
   padding: 0;
   border: 0;
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Manrope, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -28,4 +30,22 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+th {
+  @apply font-semibold;
+  @apply text-xs;
+  @apply py-3;
+  @apply border-b;
+}
+
+thead tr {
+  position: sticky;
+  top: 0;
+}
+
+tr td {
+  @apply text-xs;
+  @apply py-3;
+  @apply h-14;
 }

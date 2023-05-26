@@ -14,30 +14,30 @@ function App() {
 
   return (
     <>
-      <header className="flex h-16 px-10 border-b border-b-zinc-100 text-2xl">
+      <header className="flex bg-blue-950 text-white h-16 px-10 border-b border-b-zinc-100 text-2xl">
         <span className="my-auto">
           Meilleur moment pour acheter ou pour vendre
         </span>
       </header>
-      <div className="flex-1 px-10 flex overflow-hidden">
+      <div className="flex-1 px-10 flex overflow-hidden text-black">
         <div className="flex-1 flex flex-col my-10">
           <div className="mb-4 font-medium text-sm">
-            List des achats et ventes quotidien d&apos;Erwan
+            List des achats et ventes quotidien d&apos;Erwan:
           </div>
 
-          <div className="flex-1 overflow-y-scroll">
+          <div className="flex-1 overflow-hidden relative">
             <TransactionsTable
               loading={loading}
               transactions={response === null ? [] : response.transactions}
             />
           </div>
 
-          <div className="mt-4 font-medium text-sm">
+          <div className="flex mt-8 font-medium text-sm">
             Temps total d&apos;exécution :{" "}
             {loading ? (
               <div
                 data-testid="execution-time-loader"
-                className="h-2 bg-zinc-200 rounded-full w-20 animate-pulse "
+                className="h-4 ml-2 bg-zinc-100 my-auto rounded-full w-40 animate-pulse "
               />
             ) : (
               "01 minutes et 36 secondes"

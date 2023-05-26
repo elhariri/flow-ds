@@ -16,7 +16,7 @@ describe("UI tests", () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByText("List des achats et ventes quotidien d'Erwan")
+      screen.getByText("List des achats et ventes quotidien d'Erwan:")
     ).toBeInTheDocument();
     const regex = /Temps total d'exécution : \d+ minutes et \d+ secondes/i;
     expect(screen.getByText(regex)).toBeInTheDocument();

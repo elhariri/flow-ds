@@ -1,15 +1,6 @@
-import fs from "fs";
-import StockProfitMaximizer from "./solution/V0-naive/StockProfitMaximizer/StockProfitMaximizer";
-
-const AmazonStockPrices = JSON.parse(
-  fs.readFileSync("data/AmazonStockPrices.json", "utf8")
-);
-const GoogleStockPrices = JSON.parse(
-  fs.readFileSync("data/GoogleStockPrices.json", "utf8")
-);
-
-/* import express, { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
+
 import { ServerSuccessfullResponse } from "./index.types";
 
 const app = express();
@@ -25,7 +16,7 @@ app.get("/", (req: Request, res: Response) => {
     body: {
       transactions: [
         {
-          date: "2020-01-01",
+          date: "01/01/2020",
           action: "ACHAT",
           name: "GOOGLE",
           unit_price: 100,
@@ -34,8 +25,98 @@ app.get("/", (req: Request, res: Response) => {
           portfolio_amount: 1000,
         },
         {
-          date: "2020-01-02",
+          date: "01/01/2020",
+          action: "VENTE",
+          name: "AMAZON",
+          unit_price: 100,
+          num_shares: 10,
+          total: 1000,
+          portfolio_amount: 1000,
+        },
+        {
+          date: "02/01/2020",
           action: "ACHAT",
+          name: "GOOGLE",
+          unit_price: 200,
+          num_shares: 5,
+          total: 1000,
+          portfolio_amount: 2000,
+        },
+        {
+          date: "02/01/2020",
+          action: "VENTE",
+          name: "AMAZON",
+          unit_price: 200,
+          num_shares: 5,
+          total: 1000,
+          portfolio_amount: 2000,
+        },
+        {
+          date: "01/01/2020",
+          action: "ACHAT",
+          name: "GOOGLE",
+          unit_price: 100,
+          num_shares: 10,
+          total: 1000,
+          portfolio_amount: 1000,
+        },
+        {
+          date: "01/01/2020",
+          action: "VENTE",
+          name: "AMAZON",
+          unit_price: 100,
+          num_shares: 10,
+          total: 1000,
+          portfolio_amount: 1000,
+        },
+        {
+          date: "02/01/2020",
+          action: "ACHAT",
+          name: "GOOGLE",
+          unit_price: 200,
+          num_shares: 5,
+          total: 1000,
+          portfolio_amount: 2000,
+        },
+        {
+          date: "02/01/2020",
+          action: "VENTE",
+          name: "AMAZON",
+          unit_price: 200,
+          num_shares: 5,
+          total: 1000,
+          portfolio_amount: 2000,
+        },
+        {
+          date: "01/01/2020",
+          action: "ACHAT",
+          name: "GOOGLE",
+          unit_price: 100,
+          num_shares: 10,
+          total: 1000,
+          portfolio_amount: 1000,
+        },
+        {
+          date: "01/01/2020",
+          action: "VENTE",
+          name: "AMAZON",
+          unit_price: 100,
+          num_shares: 10,
+          total: 1000,
+          portfolio_amount: 1000,
+        },
+        {
+          date: "02/01/2020",
+          action: "ACHAT",
+          name: "GOOGLE",
+          unit_price: 200,
+          num_shares: 5,
+          total: 1000,
+          portfolio_amount: 2000,
+        },
+        {
+          date: "02/01/2020",
+          action: "VENTE",
           name: "AMAZON",
           unit_price: 200,
           num_shares: 5,
@@ -58,11 +139,3 @@ app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`Server is running on port ${port}`);
 });
- */
-
-const profit = StockProfitMaximizer.findMaxProfit(
-  GoogleStockPrices,
-  AmazonStockPrices
-);
-
-fs.writeFileSync("./", JSON.stringify(profit));

@@ -1,5 +1,5 @@
 import { TransactionCompany, TransactionType } from "../../../../index.types";
-import Portfolio from "../../Portfolio/Portfolio";
+import Portfolio from "../../../Shared/Portfolio/Portfolio";
 import DecisionsEnumerator from "../DecisionsEnumerator";
 import comparePossibilities from "../testHelper";
 
