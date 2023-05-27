@@ -130,37 +130,126 @@ class DecisionsEnumerator {
     portfolios: Portfolio[],
     dataPoint: DataPoint
   ) {
-    let newPortfolios: Portfolio[] = [];
+    const newPortfolios: Portfolio[] = [];
+
+    const googleDataPoint = dataPoint.GOOGLE || [];
+    const amazonDataPoint = dataPoint.AMAZON || [];
+
+    const canSellGoogle = googleDataPoint.filter(
+      (a) => a.action === "VENTE"
+    )[0];
+    const canSellAmazon = amazonDataPoint.filter(
+      (a) => a.action === "VENTE"
+    )[0];
+
+    const canBuyGoogle = googleDataPoint.filter((a) => a.action === "ACHAT")[0];
+    const canBuyAmazon = amazonDataPoint.filter((a) => a.action === "ACHAT")[0];
 
     for (let j = 0; j < portfolios.length; j += 1) {
-      const portfolio = portfolios[j];
+      const portfolio = portfolios[j].clone();
 
-      if (dataPoint.GOOGLE) {
-        newPortfolios = newPortfolios.concat(
-          this.findPossibilitiesOnOneShare(
-            portfolio,
-            "GOOGLE",
-            dataPoint.date,
-            dataPoint.GOOGLE
-          )
+      if (
+        canSellGoogle &&
+        canSellAmazon &&
+        portfolio.googleShares > 0 &&
+        portfolio.amazonShares > 0
+      ) {
+        portfolio.sellAllShares(
+          canSellGoogle.price,
+          canSellAmazon.price,
+          dataPoint.date
         );
-      }
+        newPortfolios.push(portfolio);
+      } else if (canSellAmazon && portfolio.amazonShares > 0) {
+        portfolio.sellShares(
+          "AMAZON",
+          portfolio.amazonShares,
+          canSellAmazon.price,
+          dataPoint.date
+        );
 
-      if (dataPoint.AMAZON) {
-        newPortfolios = newPortfolios.concat(
-          this.findPossibilitiesOnOneShare(
-            portfolio,
-            "AMAZON",
-            dataPoint.date,
-            dataPoint.AMAZON
-          )
-        );
-      }
+        if (canBuyGoogle && portfolio.cashAmount > 0) {
+          const numberOfSharesToBuy = Math.floor(
+            portfolio.cashAmount / canBuyGoogle.price
+          );
+          if (numberOfSharesToBuy > 0) {
+            portfolio.buyShares(
+              "GOOGLE",
+              numberOfSharesToBuy,
+              canBuyGoogle.price,
+              dataPoint.date
+            );
+          }
+        }
 
-      if (dataPoint.GOOGLE && dataPoint.AMAZON) {
-        newPortfolios = newPortfolios.concat(
-          this.findPossibilitiesOnBothShares(portfolio, dataPoint)
+        newPortfolios.push(portfolio);
+      } else if (canSellGoogle && portfolio.googleShares > 0) {
+        portfolio.sellShares(
+          "GOOGLE",
+          portfolio.googleShares,
+          canSellGoogle.price,
+          dataPoint.date
         );
+
+        if (canBuyAmazon && portfolio.cashAmount > 0) {
+          const numberOfSharesToBuy = Math.floor(
+            portfolio.cashAmount / canBuyAmazon.price
+          );
+          if (numberOfSharesToBuy > 0) {
+            portfolio.buyShares(
+              "AMAZON",
+              numberOfSharesToBuy,
+              canBuyAmazon.price,
+              dataPoint.date
+            );
+          }
+        }
+
+        newPortfolios.push(portfolio);
+      } else if ((canBuyGoogle || canBuyAmazon) && portfolio.cashAmount > 0) {
+        const willBuyBoth = canBuyGoogle && canBuyAmazon;
+
+        if (canBuyAmazon) {
+          let portfolioToUse = portfolio;
+
+          if (willBuyBoth) {
+            portfolioToUse = portfolio.clone();
+          }
+
+          const numberOfSharesToBuy = Math.floor(
+            portfolioToUse.cashAmount / canBuyAmazon.price
+          );
+          if (numberOfSharesToBuy > 0) {
+            portfolioToUse.buyShares(
+              "AMAZON",
+              numberOfSharesToBuy,
+              canBuyAmazon.price,
+              dataPoint.date
+            );
+
+            if (willBuyBoth) {
+              newPortfolios.push(portfolioToUse);
+            }
+          }
+        }
+
+        if (canBuyGoogle) {
+          const numberOfSharesToBuy = Math.floor(
+            portfolio.cashAmount / canBuyGoogle.price
+          );
+          if (numberOfSharesToBuy > 0) {
+            portfolio.buyShares(
+              "GOOGLE",
+              numberOfSharesToBuy,
+              canBuyGoogle.price,
+              dataPoint.date
+            );
+          }
+        }
+
+        newPortfolios.push(portfolio);
+      } else {
+        newPortfolios.push(portfolio);
       }
     }
 
@@ -178,16 +267,22 @@ class DecisionsEnumerator {
       amazonPrices
     );
 
-    console.log("filteredDataPoints.length", filteredDataPoints.length);
-
     let finalDayPortfolios: Portfolio[] = [new Portfolio()];
 
     for (let i = 0; i < filteredDataPoints.length - 1; i += 1) {
       const dataPoint = filteredDataPoints[i];
-
-      finalDayPortfolios = finalDayPortfolios.concat(
-        this.findAllDataPointPossibilities(finalDayPortfolios, dataPoint)
+      console.log(dataPoint);
+      const newPossibilities = this.findAllDataPointPossibilities(
+        finalDayPortfolios,
+        dataPoint
       );
+
+      console.log(
+        finalDayPortfolios,
+        newPossibilities.map((p) => p.clone())
+      );
+
+      finalDayPortfolios = finalDayPortfolios.concat(newPossibilities);
 
       const filteredPortfolios: Portfolio[] = [];
       const cashOnlyPortfolios: Portfolio[] = [];
@@ -203,18 +298,18 @@ class DecisionsEnumerator {
 
       let maxPortfolio = cashOnlyPortfolios[0];
 
-      for (let j = 1; j < cashOnlyPortfolios.length; j += 1) {
-        const portfolio = cashOnlyPortfolios[j];
-        if (portfolio.cashAmount > maxPortfolio.cashAmount) {
-          maxPortfolio = portfolio;
+      if (maxPortfolio) {
+        for (let j = 1; j < cashOnlyPortfolios.length; j += 1) {
+          const portfolio = cashOnlyPortfolios[j];
+          if (portfolio.cashAmount > maxPortfolio.cashAmount) {
+            maxPortfolio = portfolio;
+          }
         }
+
+        filteredPortfolios.push(maxPortfolio);
       }
-
-      filteredPortfolios.push(maxPortfolio);
-
+      console.log(filteredPortfolios.length);
       finalDayPortfolios = filteredPortfolios;
-
-      console.log("finalDayPortfolios", finalDayPortfolios.length);
     }
 
     let maxProfit = 0;

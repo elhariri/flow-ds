@@ -78,17 +78,6 @@ class LocalMinMaxFilter {
         action: "VENTE",
         price: stockPrice.highestPriceOfTheDay,
       });
-    } else if (
-      this.isLocalMax(
-        stockPrice.lowestPriceOfTheDay,
-        stockPriceBefore.lowestPriceOfTheDay,
-        stockPriceAfter.lowestPriceOfTheDay
-      )
-    ) {
-      possibleActions.push({
-        action: "VENTE",
-        price: stockPrice.highestPriceOfTheDay,
-      });
     }
 
     return possibleActions;

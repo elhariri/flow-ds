@@ -24,8 +24,8 @@ it("should pass 1", () => {
       vw: 167.9275,
       o: 170.438,
       c: 167.522,
-      highestPriceOfTheDay: 100,
-      lowestPriceOfTheDay: 100,
+      highestPriceOfTheDay: 90,
+      lowestPriceOfTheDay: 90,
       timestamp: 1641272400000,
       n: 216278,
     },
@@ -34,8 +34,8 @@ it("should pass 1", () => {
       vw: 165.6015,
       o: 166.883,
       c: 164.357,
-      highestPriceOfTheDay: 100,
-      lowestPriceOfTheDay: 100,
+      highestPriceOfTheDay: 70,
+      lowestPriceOfTheDay: 70,
       timestamp: 1641358800000,
       n: 209498,
     },
@@ -169,7 +169,7 @@ it("should pass 2", () => {
     googleStocks1,
     amazonStocks1
   );
-
+  console.log(result);
   expect(result.profit).toBe(1140);
 });
 

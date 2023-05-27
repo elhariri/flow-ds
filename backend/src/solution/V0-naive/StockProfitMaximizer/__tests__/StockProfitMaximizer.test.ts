@@ -79,7 +79,7 @@ it("should pass 1", () => {
   ).toBe(200);
 });
 
-it("should pass 2", () => {
+it.only("should pass 2", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
@@ -170,11 +170,11 @@ it("should pass 2", () => {
     googleStocks1,
     amazonStocks1
   );
-
+  console.log(result);
   expect(result.profit).toBe(1140);
 });
 
-it.only("should pass 3", () => {
+it("should pass 3", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
