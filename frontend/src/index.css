@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,6 +14,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  font-size: 16px;
 }
 
 body {
@@ -34,7 +34,7 @@ body {
 
 th {
   @apply font-semibold;
-  @apply text-xs;
+  @apply text-sm;
   @apply py-3;
   @apply border-b;
 }
@@ -45,7 +45,7 @@ thead tr {
 }
 
 tr td {
-  @apply text-xs;
+  @apply text-sm;
   @apply py-3;
   @apply h-14;
 }

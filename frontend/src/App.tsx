@@ -1,4 +1,5 @@
-import TransactionsTable from "./Components/TransactionsTable";
+import ExecutionTime from "./Components/ExecutionTime/ExecutionTime";
+import TransactionsTable from "./Components/Table/TransactionsTable";
 import useGetTransactions from "./Hooks/useGetTransactions";
 
 function App() {
@@ -14,14 +15,14 @@ function App() {
 
   return (
     <>
-      <header className="flex bg-blue-950 text-white h-16 px-10 border-b border-b-zinc-100 text-2xl">
+      <header className="flex bg-blue-950 text-white h-16 px-32 border-b border-b-zinc-100 text-3xl">
         <span className="my-auto">
           Meilleur moment pour acheter ou pour vendre
         </span>
       </header>
-      <div className="flex-1 px-10 flex overflow-hidden text-black">
-        <div className="flex-1 flex flex-col my-10">
-          <div className="mb-4 font-medium text-sm">
+      <div className="flex-1 px-32 flex overflow-hidden text-black">
+        <div className="flex-1 flex flex-col my-12">
+          <div className="mb-4 font-bold text-lg">
             List des achats et ventes quotidien d&apos;Erwan:
           </div>
 
@@ -32,17 +33,7 @@ function App() {
             />
           </div>
 
-          <div className="flex mt-8 font-medium text-sm">
-            Temps total d&apos;exécution :{" "}
-            {loading ? (
-              <div
-                data-testid="execution-time-loader"
-                className="h-4 ml-2 bg-zinc-100 my-auto rounded-full w-40 animate-pulse "
-              />
-            ) : (
-              "01 minutes et 36 secondes"
-            )}
-          </div>
+          <ExecutionTime time={response?.executionTime} loading={loading} />
         </div>
       </div>
     </>

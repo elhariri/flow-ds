@@ -1,5 +1,5 @@
 import Config from "./config";
-import StockPrices from "./data/AmazonStockPrices.json";
+import StockPrices from "./data-sample/AmazonStockPrices.json";
 
 export type DailySharePrices = (typeof StockPrices)[0];
 

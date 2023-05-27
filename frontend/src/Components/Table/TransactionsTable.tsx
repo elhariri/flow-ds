@@ -1,4 +1,4 @@
-import { Transaction } from "../App.types";
+import { Transaction } from "../../App.types";
 import TableBodyLoadingAnimation from "./TableBodyLoadingAnimation";
 
 export default function TransactionsTable({
@@ -43,14 +43,14 @@ export default function TransactionsTable({
                       borderColor:
                         transaction.action === "ACHAT" ? "#a7f3d0" : "#fecaca",
                     }}
-                    className="rounded px-2 py-1 font-semibold text-[0.7rem]"
+                    className="rounded-full px-3 py-1 font-semibold text-[0.75rem]"
                   >
                     {transaction.action}
                   </span>
                 </td>
                 <td>
                   <img
-                    className="h-4 m-auto"
+                    className="h-5 m-auto"
                     src={`${transaction.name}.webp`}
                     alt={transaction.name}
                   />
