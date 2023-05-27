@@ -9,17 +9,19 @@ class Portfolio {
 
   private shares: SharesState;
 
-  private ledger: Ledger = new Ledger();
+  private ledger: Ledger;
 
   constructor(
     amount: number = Config.InitialInvestment,
     shares: SharesState = {
       GOOGLE: 0,
       AMAZON: 0,
-    }
+    },
+    ledger: Ledger = new Ledger()
   ) {
     this.cash = amount;
     this.shares = shares;
+    this.ledger = ledger;
   }
 
   addCash(amount: number) {
@@ -105,8 +107,9 @@ class Portfolio {
 
   clone(): Portfolio {
     const sharesDeepCopy = JSON.parse(JSON.stringify(this.shares));
+    const ledgerDeepCopy = this.ledger.clone();
 
-    return new Portfolio(this.cash, sharesDeepCopy);
+    return new Portfolio(this.cash, sharesDeepCopy, ledgerDeepCopy);
   }
 
   get cashAmount(): number {
@@ -119,6 +122,10 @@ class Portfolio {
 
   get amazonShares(): number {
     return this.shares.AMAZON;
+  }
+
+  get totalShares(): { GOOGLE: number; AMAZON: number } {
+    return JSON.parse(JSON.stringify(this.shares));
   }
 
   get entries() {

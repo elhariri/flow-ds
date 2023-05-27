@@ -144,10 +144,54 @@ class LocalMinMaxFilter {
       dataPoints
     );
 
+    let lastPushedGoogleAction = false;
+    let lastPushedAmazonAction = false;
+
     for (let i = 1; i < googleStocks.length - 1; i += 1) {
       const googleActions = this.hasMinMax(googleStocks, i);
 
       const amazonActions = this.hasMinMax(amazonStocks, i);
+
+      const reducedGoogleActions = googleActions.map(({ action }) => action);
+      const reducedAmazonActions = amazonActions.map(({ action }) => action);
+
+      if (
+        !reducedAmazonActions.includes("VENTE") &&
+        !reducedAmazonActions.includes("ACHAT")
+      ) {
+        amazonActions.push({
+          action: "ACHAT",
+          price: amazonStocks[i].lowestPriceOfTheDay,
+        });
+        lastPushedAmazonAction = true;
+      }
+
+      if (
+        !reducedGoogleActions.includes("VENTE") &&
+        !reducedGoogleActions.includes("ACHAT")
+      ) {
+        googleActions.push({
+          action: "ACHAT",
+          price: googleStocks[i].lowestPriceOfTheDay,
+        });
+        lastPushedGoogleAction = true;
+      }
+
+      if (lastPushedAmazonAction) {
+        amazonActions.push({
+          action: "VENTE",
+          price: amazonStocks[i].highestPriceOfTheDay,
+        });
+
+        lastPushedAmazonAction = false;
+      }
+
+      if (lastPushedGoogleAction) {
+        googleActions.push({
+          action: "VENTE",
+          price: googleStocks[i].highestPriceOfTheDay,
+        });
+      }
 
       this.buildDataPoint(
         googleActions,

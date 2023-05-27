@@ -2,7 +2,7 @@
 // import GoogleStockPrices from "../../../../data/GoogleStockPrices.json";
 
 import Config from "../../../../config";
-import StockProfitMaximizer from "../StockProfitMaximizer";
+import StockProfitMaximizer from "../StockProfitMaximizerV1";
 
 // @ts-ignore
 Config.InitialInvestment = 100;
@@ -165,7 +165,6 @@ it("should pass 2", () => {
       n: 209498,
     },
   ];
-
   const result = StockProfitMaximizer.findMaxProfit(
     googleStocks1,
     amazonStocks1
@@ -174,7 +173,7 @@ it("should pass 2", () => {
   expect(result.profit).toBe(1140);
 });
 
-it.only("should pass 3", () => {
+it("should pass 3", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
