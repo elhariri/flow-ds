@@ -1,6 +1,6 @@
-import StockProfitMaximizer from "./V0-naive/StockProfitMaximizer/StockProfitMaximizer";
-import StockProfitMaximizerV1 from "./V1/StockProfitMaximizerV1/StockProfitMaximizerV1";
-import StockProfitMaximizerV2 from "./V2/StockProfitMaximizerV2/StockProfitMaximizerV2";
+import StockProfitMaximizer from "./Iterations/V0-naive/StockProfitMaximizer/StockProfitMaximizer";
+import StockProfitMaximizerV1 from "./Final/StockProfitMaximizerV1/StockProfitMaximizer";
+import StockProfitMaximizerV2 from "./Iterations/V2/StockProfitMaximizerV2/StockProfitMaximizerV2";
 
 export const solutions = {
   bruteForce: StockProfitMaximizer,
@@ -8,4 +8,4 @@ export const solutions = {
   v2: StockProfitMaximizerV2,
 };
 
-export default StockProfitMaximizerV1;
+export default StockProfitMaximizerV2;

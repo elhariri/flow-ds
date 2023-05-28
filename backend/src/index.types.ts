@@ -28,5 +28,5 @@ export type ServerSuccessfullResponseBody = {
 
 export type ServerSuccessfullResponse = {
   success: boolean;
-  body: ServerSuccessfullResponseBody;
+  result: ServerSuccessfullResponseBody;
 };

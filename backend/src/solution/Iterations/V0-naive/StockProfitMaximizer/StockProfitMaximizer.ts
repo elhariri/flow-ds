@@ -1,0 +1,178 @@
+import { DailyStockPrices } from "../../../../index.types";
+import DecisionsEnumerator from "../DecisionsEnumerator/DecisionsEnumerator";
+import { Possibility } from "../DecisionsEnumerator/DecisionsEnumerator.types";
+import Portfolio from "../../../Shared/Portfolio/Portfolio";
+import { DayPrices, MaximizerOutput } from "./StockProfitMaximizer.types";
+
+class StockProfitMaximizer {
+  public static sortPricesByTimestamp(prices: DailyStockPrices[]) {
+    prices.sort((a, b) => {
+      if (a.timestamp < b.timestamp) {
+        return -1;
+      }
+      if (a.timestamp > b.timestamp) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  public static buildDayPricesObject(
+    googlePrices: DailyStockPrices,
+    amazonPrices: DailyStockPrices
+  ): DayPrices {
+    const {
+      lowestPriceOfTheDay: googleBuyPrice,
+      highestPriceOfTheDay: googleSellPrice,
+      timestamp,
+    } = googlePrices;
+    const {
+      lowestPriceOfTheDay: amazonBuyPrice,
+      highestPriceOfTheDay: amazonSellPrice,
+    } = amazonPrices;
+
+    return {
+      date: timestamp,
+      GOOGLE: {
+        buyPrice: googleBuyPrice,
+        sellPrice: googleSellPrice,
+      },
+      AMAZON: {
+        buyPrice: amazonBuyPrice,
+        sellPrice: amazonSellPrice,
+      },
+    };
+  }
+
+  public static generatePossibilityPortfolio(
+    portfolio: Portfolio,
+    possibility: Possibility[],
+    dayPrices: DayPrices
+  ): Portfolio {
+    const newPortfolio = portfolio.clone();
+
+    for (let k = 0; k < possibility.length; k += 1) {
+      const { share, type, amount } = possibility[k];
+      const { date, ...prices } = dayPrices;
+      if (type === "ACHAT") {
+        const { buyPrice } = prices[share as "GOOGLE" | "AMAZON"];
+
+        newPortfolio.buyShares(share, amount, buyPrice, date);
+      } else {
+        const { sellPrice } = prices[share as "GOOGLE" | "AMAZON"];
+
+        newPortfolio.sellShares(share, amount, sellPrice, date);
+      }
+    }
+
+    return newPortfolio;
+  }
+
+  public static generateAllPossiblePortfolios(
+    portfolio: Portfolio,
+    dayPrices: DayPrices
+  ): Portfolio[] {
+    const possiblePorfolios = [];
+
+    const possibilities = DecisionsEnumerator.possibilitiesFrom(
+      portfolio,
+      dayPrices
+    );
+
+    for (let j = 0; j < possibilities.length; j += 1) {
+      const newPortfolio = this.generatePossibilityPortfolio(
+        portfolio,
+        possibilities[j],
+        dayPrices
+      );
+
+      possiblePorfolios.push(newPortfolio);
+    }
+
+    return possiblePorfolios;
+  }
+
+  public static generateAllPossiblePortfoliosAfterEachDay(
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
+  ) {
+    let portfolios: Portfolio[] = [new Portfolio()];
+
+    for (let i = 0; i < googlePrices.length - 1; i += 1) {
+      const dayPrices = this.buildDayPricesObject(
+        googlePrices[i],
+        amazonPrices[i]
+      );
+
+      let newPortfolios: Portfolio[] = [];
+
+      for (let j = 0; j < portfolios.length; j += 1) {
+        const portfolio = portfolios[j];
+
+        newPortfolios = newPortfolios.concat(
+          this.generateAllPossiblePortfolios(portfolio, dayPrices)
+        );
+      }
+
+      portfolios = portfolios.concat(newPortfolios);
+    }
+
+    return portfolios;
+  }
+
+  public static findMaxProfit(
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
+  ): MaximizerOutput {
+    this.sortPricesByTimestamp(googlePrices);
+    this.sortPricesByTimestamp(amazonPrices);
+
+    const startTime = process.hrtime.bigint();
+    const finalDayPortfolios = this.generateAllPossiblePortfoliosAfterEachDay(
+      googlePrices,
+      amazonPrices
+    );
+
+    let maxProfit = 0;
+    let maxProfitPortfolio = finalDayPortfolios[0];
+
+    const googleFinalDaySellPrice =
+      googlePrices[googlePrices.length - 1].highestPriceOfTheDay;
+    const amazonFinalDaySellPrice =
+      amazonPrices[amazonPrices.length - 1].highestPriceOfTheDay;
+
+    const finalDayDate = googlePrices[googlePrices.length - 1].timestamp;
+
+    for (let i = 0; i < finalDayPortfolios.length; i += 1) {
+      const portfolio = finalDayPortfolios[i];
+
+      portfolio.sellAllShares(
+        googleFinalDaySellPrice,
+        amazonFinalDaySellPrice,
+        finalDayDate
+      );
+
+      const profit = portfolio.getProfit();
+
+      if (profit > maxProfit) {
+        maxProfit = profit;
+        maxProfitPortfolio = portfolio;
+      }
+    }
+
+    const endTime = process.hrtime.bigint();
+
+    const elapsedTime = Number(endTime - startTime) / 1e9; // Convert to seconds
+
+    const minutes = Math.floor(elapsedTime / 60);
+    const seconds = Math.round(elapsedTime % 60);
+
+    return {
+      profit: maxProfit,
+      transactions: maxProfitPortfolio.entries,
+      executionTime: { minutes, seconds },
+    };
+  }
+}
+
+export default StockProfitMaximizer;

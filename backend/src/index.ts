@@ -2,9 +2,10 @@
 import fs from "fs";
 
 import { ServerSuccessfullResponse } from "./index.types";
-import StockProfitMaximizer from "./solution/V1/StockProfitMaximizerV1/StockProfitMaximizerV1";
+import StockProfitMaximizer from "./solution/Final/StockProfitMaximizerV1/StockProfitMaximizer";
+import Timer from "./solution/Shared/Timer/Timer";
 
-export const handler = async () => {
+export default function FinalSolution(): ServerSuccessfullResponse {
   const AmazonStockPrices = JSON.parse(
     fs.readFileSync("./data/AmazonStockPrices.json", "utf8")
   );
@@ -12,12 +13,20 @@ export const handler = async () => {
     fs.readFileSync("./data/GoogleStockPrices.json", "utf8")
   );
 
-  const data: ServerSuccessfullResponse = {
+  const timer = new Timer();
+
+  timer.start();
+  const result = StockProfitMaximizer.findMaxProfit(
+    GoogleStockPrices,
+    AmazonStockPrices
+  );
+  timer.stop();
+
+  return {
     success: true,
-    body: StockProfitMaximizer.findMaxProfit(
-      GoogleStockPrices,
-      AmazonStockPrices
-    ),
+    result: {
+      ...result,
+      executionTime: timer.getElapsedTime(),
+    },
   };
-  return { body: JSON.stringify(data) };
-};
+}
