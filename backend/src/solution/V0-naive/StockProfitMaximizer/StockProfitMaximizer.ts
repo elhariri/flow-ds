@@ -1,11 +1,11 @@
-import { DailySharePrices } from "../../../index.types";
+import { DailyStockPrices } from "../../../index.types";
 import DecisionsEnumerator from "../DecisionsEnumerator/DecisionsEnumerator";
 import { Possibility } from "../DecisionsEnumerator/DecisionsEnumerator.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import { DayPrices, MaximizerOutput } from "./StockProfitMaximizer.types";
 
 class StockProfitMaximizer {
-  public static sortPricesByTimestamp(prices: DailySharePrices[]) {
+  public static sortPricesByTimestamp(prices: DailyStockPrices[]) {
     prices.sort((a, b) => {
       if (a.timestamp < b.timestamp) {
         return -1;
@@ -18,8 +18,8 @@ class StockProfitMaximizer {
   }
 
   public static buildDayPricesObject(
-    googlePrices: DailySharePrices,
-    amazonPrices: DailySharePrices
+    googlePrices: DailyStockPrices,
+    amazonPrices: DailyStockPrices
   ): DayPrices {
     const {
       lowestPriceOfTheDay: googleBuyPrice,
@@ -92,8 +92,8 @@ class StockProfitMaximizer {
   }
 
   public static generateAllPossiblePortfoliosAfterEachDay(
-    googlePrices: DailySharePrices[],
-    amazonPrices: DailySharePrices[]
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
   ) {
     let portfolios: Portfolio[] = [new Portfolio()];
 
@@ -120,8 +120,8 @@ class StockProfitMaximizer {
   }
 
   public static findMaxProfit(
-    googlePrices: DailySharePrices[],
-    amazonPrices: DailySharePrices[]
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
   ): MaximizerOutput {
     this.sortPricesByTimestamp(googlePrices);
     this.sortPricesByTimestamp(amazonPrices);

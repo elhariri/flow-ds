@@ -1,7 +1,22 @@
-import { DailySharePrices } from "../../../index.types";
+import fs from "fs";
+
+import { DailyStockPrices } from "../../../index.types";
 import { DataPoint, StockDayAction } from "./LocalMinMaxFilter.types";
 
 class LocalMinMaxFilter {
+  private static areValidStocksInputs(
+    googleStocks: DailyStockPrices[],
+    amazonStocks: DailyStockPrices[]
+  ) {
+    if (googleStocks.length !== amazonStocks.length) {
+      throw new Error("Stocks must have the same length");
+    }
+
+    if (googleStocks.length < 2) {
+      throw new Error("Stocks must have at least 2 data points");
+    }
+  }
+
   private static isLocalMin(
     stockPrice: number,
     stockPriceBefore: number,
@@ -19,7 +34,7 @@ class LocalMinMaxFilter {
   }
 
   private static shouldBuyOnFirstDay(
-    stockPrices: DailySharePrices[]
+    stockPrices: DailyStockPrices[]
   ): StockDayAction | null {
     if (
       stockPrices[0].lowestPriceOfTheDay < stockPrices[1].lowestPriceOfTheDay ||
@@ -34,7 +49,7 @@ class LocalMinMaxFilter {
   }
 
   private static hasMinMax(
-    stockPrices: DailySharePrices[],
+    stockPrices: DailyStockPrices[],
     index: number
   ): StockDayAction[] {
     const stockPrice = stockPrices[index];
@@ -48,13 +63,7 @@ class LocalMinMaxFilter {
         stockPrice.lowestPriceOfTheDay,
         stockPriceBefore.lowestPriceOfTheDay,
         stockPriceAfter.lowestPriceOfTheDay
-      )
-    ) {
-      possibleActions.push({
-        action: "ACHAT",
-        price: stockPrice.lowestPriceOfTheDay,
-      });
-    } else if (
+      ) ||
       this.isLocalMin(
         stockPrice.highestPriceOfTheDay,
         stockPriceBefore.highestPriceOfTheDay,
@@ -86,111 +95,47 @@ class LocalMinMaxFilter {
   private static buildDataPoint(
     googleActions: StockDayAction[],
     amazonActions: StockDayAction[],
-    timestamp: number,
-    dataPoints: DataPoint[]
-  ) {
+    timestamp: number
+  ): DataPoint | null {
     const dataPoint: any = {};
 
-    let datapointHasActions = false;
-
-    if (googleActions.length > 0) {
-      dataPoint.GOOGLE = googleActions;
-      datapointHasActions = true;
-    }
-
-    if (amazonActions.length > 0) {
-      dataPoint.AMAZON = amazonActions;
-      datapointHasActions = true;
-    }
-
-    if (datapointHasActions) {
+    if (googleActions.length > 0 || amazonActions.length > 0) {
       dataPoint.date = timestamp;
-      dataPoints.push(dataPoint);
+
+      if (googleActions.length > 0) {
+        dataPoint.GOOGLE = googleActions;
+      }
+
+      if (amazonActions.length > 0) {
+        dataPoint.AMAZON = amazonActions;
+      }
+
+      return dataPoint;
     }
+
+    return null;
   }
 
-  public static filter(
-    googleStocks: DailySharePrices[],
-    amazonStocks: DailySharePrices[]
-  ) {
-    const dataPoints: DataPoint[] = [];
-
-    if (googleStocks.length !== amazonStocks.length) {
-      throw new Error("Stocks must have the same length");
-    }
-
-    if (googleStocks.length < 2) {
-      throw new Error("Stocks must have at least 2 data points");
-    }
-
+  private static buildFirstDayDataPoint(
+    googleStocks: DailyStockPrices[],
+    amazonStocks: DailyStockPrices[]
+  ): DataPoint | null {
     const firstDayGoogleAction = this.shouldBuyOnFirstDay(googleStocks);
     const firstDayAmazonAction = this.shouldBuyOnFirstDay(amazonStocks);
 
-    this.buildDataPoint(
+    return this.buildDataPoint(
       firstDayGoogleAction ? [firstDayGoogleAction] : [],
       firstDayAmazonAction ? [firstDayAmazonAction] : [],
-      googleStocks[0].timestamp,
-      dataPoints
+      googleStocks[0].timestamp
     );
+  }
 
-    let lastPushedGoogleAction = false;
-    let lastPushedAmazonAction = false;
-
-    for (let i = 1; i < googleStocks.length - 1; i += 1) {
-      const googleActions = this.hasMinMax(googleStocks, i);
-
-      const amazonActions = this.hasMinMax(amazonStocks, i);
-
-      const reducedGoogleActions = googleActions.map(({ action }) => action);
-      const reducedAmazonActions = amazonActions.map(({ action }) => action);
-
-      if (
-        !reducedAmazonActions.includes("VENTE") &&
-        !reducedAmazonActions.includes("ACHAT")
-      ) {
-        amazonActions.push({
-          action: "ACHAT",
-          price: amazonStocks[i].lowestPriceOfTheDay,
-        });
-        lastPushedAmazonAction = true;
-      }
-
-      if (
-        !reducedGoogleActions.includes("VENTE") &&
-        !reducedGoogleActions.includes("ACHAT")
-      ) {
-        googleActions.push({
-          action: "ACHAT",
-          price: googleStocks[i].lowestPriceOfTheDay,
-        });
-        lastPushedGoogleAction = true;
-      }
-
-      if (lastPushedAmazonAction) {
-        amazonActions.push({
-          action: "VENTE",
-          price: amazonStocks[i].highestPriceOfTheDay,
-        });
-
-        lastPushedAmazonAction = false;
-      }
-
-      if (lastPushedGoogleAction) {
-        googleActions.push({
-          action: "VENTE",
-          price: googleStocks[i].highestPriceOfTheDay,
-        });
-      }
-
-      this.buildDataPoint(
-        googleActions,
-        amazonActions,
-        googleStocks[i].timestamp,
-        dataPoints
-      );
-    }
-
-    dataPoints.push({
+  private static buildLastDayDataPoint(
+    googleStocks: DailyStockPrices[],
+    amazonStocks: DailyStockPrices[]
+  ): DataPoint {
+    return {
+      date: googleStocks[googleStocks.length - 1].timestamp,
       GOOGLE: [
         {
           action: "VENTE",
@@ -203,8 +148,85 @@ class LocalMinMaxFilter {
           price: amazonStocks[amazonStocks.length - 1].highestPriceOfTheDay,
         },
       ],
-      date: googleStocks[googleStocks.length - 1].timestamp,
-    });
+    };
+  }
+
+  public static filter(
+    googleStocks: DailyStockPrices[],
+    amazonStocks: DailyStockPrices[]
+  ) {
+    const dataPoints: DataPoint[] = [];
+
+    this.areValidStocksInputs(googleStocks, amazonStocks);
+
+    const firstDayDataPoint = this.buildFirstDayDataPoint(
+      googleStocks,
+      amazonStocks
+    );
+
+    if (firstDayDataPoint) {
+      dataPoints.push(firstDayDataPoint);
+    }
+
+    let lastPushedGoogleAction = true;
+    let lastPushedAmazonAction = true;
+
+    for (let i = 1; i < googleStocks.length - 1; i += 1) {
+      const googleActions = this.hasMinMax(googleStocks, i);
+
+      const amazonActions = this.hasMinMax(amazonStocks, i);
+
+      // if No cash try to sell
+      if (true) {
+        amazonActions.push({
+          action: "ACHAT",
+          price: amazonStocks[i].lowestPriceOfTheDay,
+        });
+        lastPushedAmazonAction = true;
+      }
+
+      if (true) {
+        googleActions.push({
+          action: "ACHAT",
+          price: googleStocks[i].lowestPriceOfTheDay,
+        });
+        lastPushedGoogleAction = true;
+      }
+
+      if (
+        lastPushedAmazonAction &&
+        amazonActions.filter(({ action }) => action === "VENTE").length === 0
+      ) {
+        amazonActions.push({
+          action: "VENTE",
+          price: amazonStocks[i].highestPriceOfTheDay,
+        });
+      }
+
+      if (
+        lastPushedGoogleAction &&
+        googleActions.filter(({ action }) => action === "VENTE").length === 0
+      ) {
+        googleActions.push({
+          action: "VENTE",
+          price: googleStocks[i].highestPriceOfTheDay,
+        });
+      }
+
+      const dataPoint = this.buildDataPoint(
+        googleActions,
+        amazonActions,
+        googleStocks[i].timestamp
+      );
+
+      if (dataPoint) {
+        dataPoints.push(dataPoint);
+      }
+    }
+
+    dataPoints.push(this.buildLastDayDataPoint(googleStocks, amazonStocks));
+
+    fs.writeFileSync("./datapoint.json", JSON.stringify(dataPoints));
 
     return dataPoints;
   }

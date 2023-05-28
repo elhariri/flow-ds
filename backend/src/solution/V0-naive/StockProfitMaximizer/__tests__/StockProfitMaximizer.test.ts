@@ -79,7 +79,7 @@ it("should pass 1", () => {
   ).toBe(200);
 });
 
-it.only("should pass 2", () => {
+it("should pass 2", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,

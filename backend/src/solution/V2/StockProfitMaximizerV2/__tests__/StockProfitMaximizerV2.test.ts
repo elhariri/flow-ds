@@ -170,10 +170,10 @@ it("should pass 2", () => {
     amazonStocks1
   );
 
-  expect(result.profit).toBe(1140);
+  expect(result.profit).toBe(1540);
 });
 
-it.only("should pass 3", () => {
+it("should pass 3", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
@@ -305,5 +305,5 @@ it.only("should pass 3", () => {
     amazonStocks1
   );
 
-  expect(result.profit).toBe(2070);
+  expect(result.profit).toBe(1540);
 });

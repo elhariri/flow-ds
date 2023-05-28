@@ -1,3 +1,4 @@
+import DateHelper from "../../Utilities/DateHelper";
 import Portfolio from "../Portfolio";
 
 describe("Cash operations", () => {
@@ -193,7 +194,7 @@ describe("Ledger operations", () => {
 
     expect(portfolio.entries).toEqual([
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "ACHAT",
         name: "GOOGLE",
         num_shares: 10,
@@ -213,7 +214,7 @@ describe("Ledger operations", () => {
 
     expect(portfolio.entries).toEqual([
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "ACHAT",
         name: "GOOGLE",
         num_shares: 10,
@@ -222,7 +223,7 @@ describe("Ledger operations", () => {
         portfolio_amount: 99000,
       },
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "VENTE",
         name: "GOOGLE",
         num_shares: 5,

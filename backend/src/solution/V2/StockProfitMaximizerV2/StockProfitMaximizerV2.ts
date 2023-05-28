@@ -1,4 +1,4 @@
-import { DailySharePrices } from "../../../index.types";
+import { DailyStockPrices } from "../../../index.types";
 
 import LocalMinMaxFilter from "../LocalMinMaxFilter/LocalMinMaxFilter";
 
@@ -7,8 +7,8 @@ import PorfoliosPool from "../PorfoliosPool/PorfoliosPool";
 
 class DecisionsEnumerator {
   public static findMaxProfit(
-    googlePrices: DailySharePrices[],
-    amazonPrices: DailySharePrices[]
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
   ) {
     const filteredDatapoints = LocalMinMaxFilter.filter(
       googlePrices,

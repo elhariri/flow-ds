@@ -116,6 +116,12 @@ class Portfolio {
     }
   }
 
+  sellAllOf(share: TransactionCompany, sellPrice: number, date: number) {
+    if (this.totalShares[share] > 0) {
+      this.sellShares(share, this.totalShares[share], sellPrice, date);
+    }
+  }
+
   getProfit(): number {
     return MathHelper.roundToTwo(this.cashAmount - Config.InitialInvestment);
   }

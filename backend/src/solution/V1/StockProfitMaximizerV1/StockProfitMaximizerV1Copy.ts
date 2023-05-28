@@ -1,4 +1,4 @@
-import { DailySharePrices, TransactionCompany } from "../../../index.types";
+import { DailyStockPrices, TransactionCompany } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import LocalMinMaxFilter from "../LocalMinMaxFilter/LocalMinMaxFilter";
 import {
@@ -257,8 +257,8 @@ class DecisionsEnumerator {
   }
 
   public static findMaxProfit(
-    googlePrices: DailySharePrices[],
-    amazonPrices: DailySharePrices[]
+    googlePrices: DailyStockPrices[],
+    amazonPrices: DailyStockPrices[]
   ) {
     const startTime = process.hrtime.bigint();
 

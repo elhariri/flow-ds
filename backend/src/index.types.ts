@@ -1,7 +1,7 @@
 import Config from "./config";
 import StockPrices from "./data-sample/AmazonStockPrices.json";
 
-export type DailySharePrices = (typeof StockPrices)[0];
+export type DailyStockPrices = (typeof StockPrices)[0];
 
 export type TransactionType = "ACHAT" | "VENTE";
 export type TransactionCompany = (typeof Config.Stocks)[number];

@@ -1,3 +1,4 @@
+import DateHelper from "../../Utilities/DateHelper";
 import Ledger from "../Leger";
 
 it("should allow adding a buy entry", () => {
@@ -8,7 +9,7 @@ it("should allow adding a buy entry", () => {
   expect(ledger.allEntries).toEqual(
     expect.arrayContaining([
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "ACHAT",
         name: "GOOGLE",
         num_shares: 10,
@@ -33,7 +34,7 @@ it("Should allow cloning the Ledger", () => {
   expect(ledger2.allEntries).toEqual(
     expect.arrayContaining([
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "ACHAT",
         name: "GOOGLE",
         num_shares: 10,
@@ -42,7 +43,7 @@ it("Should allow cloning the Ledger", () => {
         portfolio_amount: 1000,
       },
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "VENTE",
         name: "AMAZON",
         num_shares: 5,
@@ -64,7 +65,7 @@ it("should allow adding a sell entry", () => {
   expect(ledger.allEntries).toEqual(
     expect.arrayContaining([
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "ACHAT",
         name: "GOOGLE",
         num_shares: 10,
@@ -73,7 +74,7 @@ it("should allow adding a sell entry", () => {
         portfolio_amount: 1000,
       },
       {
-        date: "12345",
+        date: DateHelper.format(12345),
         action: "VENTE",
         name: "GOOGLE",
         num_shares: 5,

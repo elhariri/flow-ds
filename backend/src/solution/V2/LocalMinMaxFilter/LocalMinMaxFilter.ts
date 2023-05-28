@@ -1,4 +1,4 @@
-import { DailySharePrices, TransactionType } from "../../../index.types";
+import { DailyStockPrices, TransactionType } from "../../../index.types";
 import { Datapoint } from "../index.types";
 
 class LocalMinMaxFilter {
@@ -19,8 +19,8 @@ class LocalMinMaxFilter {
   }
 
   private static shouldBuyOnFirstDay(
-    firstDayStockPrices: DailySharePrices,
-    secondDayStockPrices: DailySharePrices
+    firstDayStockPrices: DailyStockPrices,
+    secondDayStockPrices: DailyStockPrices
   ): boolean {
     if (
       firstDayStockPrices.lowestPriceOfTheDay <
@@ -34,7 +34,7 @@ class LocalMinMaxFilter {
   }
 
   private static hasMinMax(
-    stockPrices: DailySharePrices[],
+    stockPrices: DailyStockPrices[],
     index: number
   ): TransactionType[] {
     const stockPrice = stockPrices[index];
@@ -74,8 +74,8 @@ class LocalMinMaxFilter {
   private static buildDatapoint(
     googleActions: TransactionType[],
     amazonActions: TransactionType[],
-    googleData: DailySharePrices,
-    amazonData: DailySharePrices
+    googleData: DailyStockPrices,
+    amazonData: DailyStockPrices
   ): Datapoint {
     if (googleActions.length === 0 && amazonActions.length === 0) {
       throw new Error("No actions");
@@ -101,8 +101,8 @@ class LocalMinMaxFilter {
   }
 
   private static buildFirstDayDatapoint(
-    googleData: { firstDay: DailySharePrices; secondDay: DailySharePrices },
-    amazonData: { firstDay: DailySharePrices; secondDay: DailySharePrices }
+    googleData: { firstDay: DailyStockPrices; secondDay: DailyStockPrices },
+    amazonData: { firstDay: DailyStockPrices; secondDay: DailyStockPrices }
   ): Datapoint | null {
     const firstDayGoogleAction = this.shouldBuyOnFirstDay(
       googleData.firstDay,
@@ -126,8 +126,8 @@ class LocalMinMaxFilter {
   }
 
   private static buildLastDayDatapoint(
-    googleData: DailySharePrices,
-    amazonData: DailySharePrices
+    googleData: DailyStockPrices,
+    amazonData: DailyStockPrices
   ): Datapoint {
     return {
       date: googleData.timestamp,
@@ -149,8 +149,8 @@ class LocalMinMaxFilter {
   }
 
   public static filter(
-    googleStocks: DailySharePrices[],
-    amazonStocks: DailySharePrices[]
+    googleStocks: DailyStockPrices[],
+    amazonStocks: DailyStockPrices[]
   ) {
     const dataPoints: Datapoint[] = [];
 
