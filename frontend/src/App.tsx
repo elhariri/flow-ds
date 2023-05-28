@@ -22,10 +22,24 @@ function App() {
       </header>
       <div className="flex-1 px-32 flex overflow-hidden text-black">
         <div className="flex-1 flex flex-col my-12">
-          <div className="mb-4 font-bold text-lg">
-            List des achats et ventes quotidien d&apos;Erwan:
+          <div className="flex">
+            <div className="mb-4 font-bold text-lg">
+              List des achats et ventes quotidien d&apos;Erwan:
+            </div>
+            <div className="flex ml-auto font-bold text-xl">
+              Profit:
+              {response !== null ? (
+                <span className="text-emerald-500 bg-emerald-50 ml-1 h-fit border border-emerald-200 rounded px-2">
+                  + {response.profit} €
+                </span>
+              ) : (
+                <div
+                  data-testid="execution-time-loader"
+                  className="h-4 ml-2 bg-zinc-100 my-auto rounded-full w-40 animate-pulse "
+                />
+              )}
+            </div>
           </div>
-
           <div className="flex-1 overflow-hidden relative">
             <TransactionsTable
               loading={loading}

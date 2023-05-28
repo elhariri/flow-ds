@@ -17,6 +17,7 @@ export type Transaction = {
 };
 
 export type ServerSuccessfullResponseBody = {
+  profit: number;
   transactions: Transaction[];
   executionTime: ExecutionTime;
 };
