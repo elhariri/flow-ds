@@ -2,6 +2,7 @@ import Config from "../../../config";
 import { TransactionCompany } from "../../../index.types";
 import Decision from "../Decision/Decision";
 import Ledger from "../Ledger/Leger";
+import MathHelper from "../Utilities/MathHelper";
 import { SharesState } from "./Porfolio.types";
 
 class Portfolio {
@@ -61,6 +62,20 @@ class Portfolio {
     );
   }
 
+  buyMaxShares(
+    company: TransactionCompany,
+    unitPrice: number,
+    date: number
+  ): boolean {
+    const maxShares = MathHelper.maxAmountToBuy(this.cashAmount, unitPrice);
+    if (maxShares > 0) {
+      this.buyShares(company, maxShares, unitPrice, date);
+      return true;
+    }
+
+    return false;
+  }
+
   sellShares(
     name: TransactionCompany,
     numShares: number,
@@ -102,7 +117,7 @@ class Portfolio {
   }
 
   getProfit(): number {
-    return this.cashAmount - Config.InitialInvestment;
+    return MathHelper.roundToTwo(this.cashAmount - Config.InitialInvestment);
   }
 
   clone(): Portfolio {

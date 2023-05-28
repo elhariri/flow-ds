@@ -1,9 +1,131 @@
-import { DailySharePrices } from "../../../index.types";
+import { DailySharePrices, TransactionCompany } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import LocalMinMaxFilter from "../LocalMinMaxFilter/LocalMinMaxFilter";
-import { DataPoint } from "../LocalMinMaxFilter/LocalMinMaxFilter.types";
+import {
+  DataPoint,
+  StockDayAction,
+} from "../LocalMinMaxFilter/LocalMinMaxFilter.types";
 
 class DecisionsEnumerator {
+  private static findPossibilitiesOnOneShare(
+    portfolio: Portfolio,
+    stockName: TransactionCompany,
+    date: number,
+    stockPossibleActions: StockDayAction[]
+  ) {
+    const newPortfolios: Portfolio[] = [];
+
+    for (let i = 0; i < stockPossibleActions.length; i += 1) {
+      const stockPossibleAction = stockPossibleActions[i];
+      const newPortfolio = portfolio.clone();
+      if (
+        stockPossibleAction.action === "ACHAT" &&
+        newPortfolio.cashAmount > 0
+      ) {
+        const numberOfSharesToBuy = Math.floor(
+          newPortfolio.cashAmount / stockPossibleAction.price
+        );
+        if (numberOfSharesToBuy > 0) {
+          newPortfolio.buyShares(
+            stockName,
+            Math.floor(newPortfolio.cashAmount / stockPossibleAction.price),
+            stockPossibleAction.price,
+            date
+          );
+        }
+      } else if (
+        stockPossibleAction.action === "VENTE" &&
+        newPortfolio.totalShares[stockName] > 0
+      ) {
+        newPortfolio.sellShares(
+          stockName,
+          newPortfolio.totalShares[stockName],
+          stockPossibleAction.price,
+          date
+        );
+      }
+
+      newPortfolios.push(newPortfolio);
+    }
+
+    return newPortfolios;
+  }
+
+  private static findPossibilitiesOnBothShares(
+    portfolio: Portfolio,
+    dataPoint: DataPoint
+  ) {
+    const newPortfolios: Portfolio[] = [];
+
+    for (let i = 0; i < dataPoint.GOOGLE.length; i += 1) {
+      for (let j = 0; j < dataPoint.AMAZON.length; j += 1) {
+        const googleAction = dataPoint.GOOGLE[i];
+        const amazonAction = dataPoint.AMAZON[j];
+
+        const newPortfolio = portfolio.clone();
+
+        if (googleAction.action !== amazonAction.action) {
+          let actionToBuy: TransactionCompany = "GOOGLE";
+
+          if (
+            googleAction.action === "VENTE" &&
+            newPortfolio.googleShares > 0
+          ) {
+            newPortfolio.sellShares(
+              "GOOGLE",
+              newPortfolio.googleShares,
+              googleAction.price,
+              dataPoint.date
+            );
+            actionToBuy = "AMAZON";
+          }
+
+          if (
+            amazonAction.action === "VENTE" &&
+            newPortfolio.amazonShares > 0
+          ) {
+            newPortfolio.sellShares(
+              "AMAZON",
+              newPortfolio.amazonShares,
+              amazonAction.price,
+              dataPoint.date
+            );
+            actionToBuy = "GOOGLE";
+          }
+
+          if (newPortfolio.cashAmount > 0) {
+            let { price } = googleAction;
+            if (actionToBuy === "AMAZON") {
+              price = amazonAction.price;
+            }
+            const numberOfSharesToBuy = Math.floor(
+              newPortfolio.cashAmount / price
+            );
+
+            if (numberOfSharesToBuy > 0) {
+              newPortfolio.buyShares(
+                actionToBuy,
+                Math.floor(newPortfolio.cashAmount / price),
+                price,
+                dataPoint.date
+              );
+            }
+          }
+        } else if (googleAction.action === "VENTE") {
+          newPortfolio.sellAllShares(
+            googleAction.price,
+            amazonAction.price,
+            dataPoint.date
+          );
+        }
+
+        newPortfolios.push(newPortfolio);
+      }
+    }
+
+    return newPortfolios;
+  }
+
   private static findAllDataPointPossibilities(
     portfolios: Portfolio[],
     dataPoint: DataPoint

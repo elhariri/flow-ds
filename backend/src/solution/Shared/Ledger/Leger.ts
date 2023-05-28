@@ -4,6 +4,8 @@ import {
   TransactionType,
 } from "../../../index.types";
 import Decision from "../Decision/Decision";
+import DateHelper from "../Utilities/DateHelper";
+import MathHelper from "../Utilities/MathHelper";
 
 class Ledger {
   private entries: Transaction[] = [];
@@ -23,13 +25,13 @@ class Ledger {
     }
 
     this.entries.push({
-      date: date.toString(),
+      date: DateHelper.format(date),
       action,
       name: share,
       num_shares: numShares,
-      unit_price: unitPrice,
-      total: numShares * unitPrice,
-      portfolio_amount: portfolioAmount,
+      unit_price: MathHelper.roundToTwo(unitPrice),
+      total: MathHelper.roundToTwo(numShares * unitPrice),
+      portfolio_amount: MathHelper.roundToTwo(portfolioAmount),
     });
   }
 

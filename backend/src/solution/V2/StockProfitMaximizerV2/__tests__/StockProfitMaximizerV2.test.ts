@@ -2,7 +2,7 @@
 // import GoogleStockPrices from "../../../../data/GoogleStockPrices.json";
 
 import Config from "../../../../config";
-import StockProfitMaximizer from "../StockProfitMaximizer";
+import StockProfitMaximizer from "../StockProfitMaximizerV2";
 
 // @ts-ignore
 Config.InitialInvestment = 100;
@@ -16,7 +16,7 @@ it("should pass 1", () => {
       c: 170.4045,
       highestPriceOfTheDay: 100,
       lowestPriceOfTheDay: 100,
-      timestamp: 1641186000000,
+      timestamp: 0,
       n: 187695,
     },
     {
@@ -24,9 +24,9 @@ it("should pass 1", () => {
       vw: 167.9275,
       o: 170.438,
       c: 167.522,
-      highestPriceOfTheDay: 100,
-      lowestPriceOfTheDay: 100,
-      timestamp: 1641272400000,
+      highestPriceOfTheDay: 90,
+      lowestPriceOfTheDay: 90,
+      timestamp: 1,
       n: 216278,
     },
     {
@@ -34,9 +34,9 @@ it("should pass 1", () => {
       vw: 165.6015,
       o: 166.883,
       c: 164.357,
-      highestPriceOfTheDay: 100,
-      lowestPriceOfTheDay: 100,
-      timestamp: 1641358800000,
+      highestPriceOfTheDay: 70,
+      lowestPriceOfTheDay: 70,
+      timestamp: 2,
       n: 209498,
     },
   ];
@@ -49,7 +49,7 @@ it("should pass 1", () => {
       c: 170.4045,
       highestPriceOfTheDay: 100,
       lowestPriceOfTheDay: 100,
-      timestamp: 1641186000000,
+      timestamp: 0,
       n: 187695,
     },
     {
@@ -59,7 +59,7 @@ it("should pass 1", () => {
       c: 167.522,
       highestPriceOfTheDay: 200,
       lowestPriceOfTheDay: 200,
-      timestamp: 1641272400000,
+      timestamp: 1,
       n: 216278,
     },
     {
@@ -69,7 +69,7 @@ it("should pass 1", () => {
       c: 164.357,
       highestPriceOfTheDay: 300,
       lowestPriceOfTheDay: 300,
-      timestamp: 1641358800000,
+      timestamp: 2,
       n: 209498,
     },
   ];
@@ -79,7 +79,7 @@ it("should pass 1", () => {
   ).toBe(200);
 });
 
-it.only("should pass 2", () => {
+it("should pass 2", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
@@ -165,7 +165,6 @@ it.only("should pass 2", () => {
       n: 209498,
     },
   ];
-
   const result = StockProfitMaximizer.findMaxProfit(
     googleStocks1,
     amazonStocks1
@@ -174,7 +173,7 @@ it.only("should pass 2", () => {
   expect(result.profit).toBe(1140);
 });
 
-it("should pass 3", () => {
+it.only("should pass 3", () => {
   const amazonStocks1 = [
     {
       v: 6.386914e7,
