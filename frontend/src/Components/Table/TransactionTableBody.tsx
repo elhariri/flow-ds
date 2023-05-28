@@ -1,4 +1,5 @@
 import { Transaction } from "../../App.types";
+import formatPrice from "../../Helpers/formatPrice";
 import ActionCell from "./TableCells/ActionCell";
 import DateCell from "./TableCells/DateCell";
 import StockImgCell from "./TableCells/StockImgCell";
@@ -20,9 +21,11 @@ export default function TransactionTableBody({
           <StockImgCell stock={transaction.name} />
           <td>{transaction.unit_price} €</td>
           <td>{transaction.num_shares}</td>
-          <td className="hidden md:table-cell">{transaction.total} €</td>
+          <td className="hidden md:table-cell">
+            {formatPrice(transaction.total)} €
+          </td>
           <td>
-            <strong>{transaction.portfolio_amount}</strong> €
+            <strong>{formatPrice(transaction.portfolio_amount)}</strong> €
           </td>
         </tr>
       ))}

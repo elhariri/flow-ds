@@ -15,7 +15,7 @@ export default function ActionCell({ action }: { action: TransactionType }) {
         >
           <span className="hidden md:inline-block mx-auto">{action}</span>
           <div className="inline-block md:hidden px-1 text-lg">
-            {action === "ACHAT" ? "+" : "-"}
+            {action === "ACHAT" ? " + " : " - "}
           </div>
         </div>
       </div>

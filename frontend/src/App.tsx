@@ -1,5 +1,6 @@
 import ExecutionTime from "./Components/ExecutionTime/ExecutionTime";
 import TransactionsTable from "./Components/Table/TransactionsTable";
+import formatPrice from "./Helpers/formatPrice";
 import useGetTransactions from "./Hooks/useGetTransactions";
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
               <span className="my-auto">Profit:</span>
               {!loading && response !== null ? (
                 <span className="text-emerald-500 bg-emerald-50 ml-1 h-fit border border-emerald-200 rounded px-2">
-                  + {response.profit} €
+                  + {formatPrice(response.profit)} €
                 </span>
               ) : (
                 <div
