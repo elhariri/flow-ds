@@ -74,22 +74,19 @@ class DecisionsEnumerator {
   ) {
     const dataPoints = DataParser.filter(googlePrices, amazonPrices);
 
-    let finalDayPortfolios: Portfolio[] = [new Portfolio()];
+    let outcomes: Portfolio[] = [new Portfolio()];
 
     for (let i = 0; i < dataPoints.length - 1; i += 1) {
       const dataPoint = dataPoints[i];
 
-      finalDayPortfolios = OutcomesGenerator.from(
-        finalDayPortfolios,
-        dataPoint
-      );
-
-      finalDayPortfolios = this.filterWeakPortfolios(finalDayPortfolios);
+      outcomes = OutcomesGenerator.from(outcomes, dataPoint);
+      outcomes = this.filterWeakPortfolios(outcomes);
     }
 
+    const lastDataPoint = dataPoints[dataPoints.length - 1];
     const maxProfitPortfolio = this.findPortfolioWithMaxProfit(
-      finalDayPortfolios,
-      dataPoints[dataPoints.length - 1]
+      outcomes,
+      lastDataPoint
     );
 
     return {

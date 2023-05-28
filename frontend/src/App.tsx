@@ -15,20 +15,20 @@ function App() {
 
   return (
     <>
-      <header className="flex bg-blue-950 text-white h-16 px-32 border-b border-b-zinc-100 text-3xl">
+      <header className="flex bg-blue-950 text-white h-16 px-4 md:px-32 border-b border-b-zinc-100 text-xl md:text-3xl">
         <span className="my-auto">
           Meilleur moment pour acheter ou pour vendre
         </span>
       </header>
-      <div className="flex-1 px-32 flex overflow-hidden text-black">
+      <div className="flex-1 px-4 md:px-32 flex overflow-hidden text-black">
         <div className="flex-1 flex flex-col my-12">
-          <div className="flex">
-            <div className="mb-4 font-bold text-lg">
+          <div className="flex flex-col md:flex-row mb-4">
+            <div className="my-auto font-bold text-sm md:text-lg">
               List des achats et ventes quotidien d&apos;Erwan:
             </div>
-            <div className="flex ml-auto font-bold text-xl">
-              Profit:
-              {response !== null ? (
+            <div className="flex md:ml-auto font-bold text-sm md:text-xl">
+              <span className="my-auto">Profit:</span>
+              {!loading && response !== null ? (
                 <span className="text-emerald-500 bg-emerald-50 ml-1 h-fit border border-emerald-200 rounded px-2">
                   + {response.profit} €
                 </span>

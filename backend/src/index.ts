@@ -2,7 +2,7 @@
 import fs from "fs";
 
 import { ServerSuccessfullResponse } from "./index.types";
-import StockProfitMaximizer from "./solution/Final/StockProfitMaximizerV1/StockProfitMaximizer";
+import StockProfitMaximizer from "./solution/Final/StockProfitMaximizer/StockProfitMaximizer";
 import Timer from "./solution/Shared/Timer/Timer";
 
 export default function FinalSolution(): ServerSuccessfullResponse {
