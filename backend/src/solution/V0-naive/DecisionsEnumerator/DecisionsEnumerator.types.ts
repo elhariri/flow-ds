@@ -1,4 +1,4 @@
-import { TransactionCompany, TransactionType } from "../../../index.types";
+import { Stocks, TransactionType } from "../../../index.types";
 
 export type ShareDayPrices = {
   buyPrice: number;
@@ -12,6 +12,6 @@ export type SharesDayPrices = {
 
 export type Possibility = {
   type: TransactionType;
-  share: TransactionCompany;
+  share: Stocks;
   amount: number;
 };

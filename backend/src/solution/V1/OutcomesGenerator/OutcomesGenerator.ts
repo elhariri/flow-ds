@@ -1,74 +1,52 @@
 import Portfolio from "../../Shared/Portfolio/Portfolio";
-import { DataPoint } from "../LocalMinMaxFilter/LocalMinMaxFilter.types";
+import { Datapoint } from "../index.types";
 
 class OutcomesGenerator {
-  static from(portfolios: Portfolio[], dataPoint: DataPoint) {
+  static from(portfolios: Portfolio[], dataPoint: Datapoint) {
     const newPortfolios: Portfolio[] = [];
 
-    const googleDataPoint = dataPoint.GOOGLE || [];
-    const amazonDataPoint = dataPoint.AMAZON || [];
-
-    const { date } = dataPoint;
-
-    const canSellGoogle = googleDataPoint.filter(
-      (a) => a.action === "VENTE"
-    )[0];
-    const canSellAmazon = amazonDataPoint.filter(
-      (a) => a.action === "VENTE"
-    )[0];
-
-    const canBuyGoogle = googleDataPoint.filter((a) => a.action === "ACHAT")[0];
-    const canBuyAmazon = amazonDataPoint.filter((a) => a.action === "ACHAT")[0];
+    const {
+      date,
+      prices: { GOOGLE: googlePrices, AMAZON: amazonPrices },
+    } = dataPoint;
 
     for (let j = 0; j < portfolios.length; j += 1) {
       const portfolio = portfolios[j].clone();
 
-      if (
-        canSellGoogle &&
-        canSellAmazon &&
-        portfolio.googleShares > 0 &&
-        portfolio.amazonShares > 0
-      ) {
-        portfolio.sellAllShares(canSellGoogle.price, canSellAmazon.price, date);
+      // TO_DO: Refactor this
+      if (portfolio.googleShares > 0 && portfolio.amazonShares > 0) {
+        portfolio.sellAllShares(
+          googlePrices.sellPrice,
+          amazonPrices.sellPrice,
+          date
+        );
         newPortfolios.push(portfolio);
-      } else if (canSellAmazon && portfolio.amazonShares > 0) {
-        portfolio.sellAllOf("AMAZON", canSellAmazon.price, date);
+      } else if (portfolio.amazonShares > 0) {
+        portfolio.sellAllOf("AMAZON", amazonPrices.sellPrice, date);
 
-        if (canBuyGoogle) {
-          portfolio.buyMaxShares("GOOGLE", canBuyGoogle.price, date);
-        }
+        portfolio.buyMaxShares("GOOGLE", googlePrices.buyPrice, date);
 
         newPortfolios.push(portfolio);
-      } else if (canSellGoogle && portfolio.googleShares > 0) {
-        portfolio.sellAllOf("GOOGLE", canSellGoogle.price, date);
+      } else if (portfolio.googleShares > 0) {
+        portfolio.sellAllOf("GOOGLE", googlePrices.sellPrice, date);
 
-        if (canBuyAmazon) {
-          portfolio.buyMaxShares("AMAZON", canBuyAmazon.price, date);
-        }
+        portfolio.buyMaxShares("AMAZON", amazonPrices.buyPrice, date);
 
         newPortfolios.push(portfolio);
-      } else if ((canBuyGoogle || canBuyAmazon) && portfolio.cashAmount > 0) {
-        const willBuyBoth = canBuyGoogle && canBuyAmazon;
+      } else {
+        const buyAmazonPortfolio = portfolio.clone();
+        const buyGooglePortfolio = portfolio.clone();
 
-        if (canBuyAmazon) {
-          let portfolioToUse = portfolio;
-
-          if (willBuyBoth) {
-            portfolioToUse = portfolio.clone();
-          }
-
-          portfolioToUse.buyMaxShares("AMAZON", canBuyAmazon.price, date);
-
-          if (willBuyBoth) {
-            newPortfolios.push(portfolioToUse);
-          }
+        if (
+          buyAmazonPortfolio.buyMaxShares("AMAZON", amazonPrices.buyPrice, date)
+        ) {
+          newPortfolios.push(buyAmazonPortfolio);
         }
-
-        if (canBuyGoogle) {
-          portfolio.buyMaxShares("GOOGLE", canBuyGoogle.price, date);
+        if (
+          buyGooglePortfolio.buyMaxShares("GOOGLE", googlePrices.buyPrice, date)
+        ) {
+          newPortfolios.push(buyGooglePortfolio);
         }
-
-        newPortfolios.push(portfolio);
       }
     }
 

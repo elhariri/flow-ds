@@ -1,8 +1,4 @@
-import {
-  Transaction,
-  TransactionCompany,
-  TransactionType,
-} from "../../../index.types";
+import { Transaction, Stocks, TransactionType } from "../../../index.types";
 import Decision from "../Decision/Decision";
 import DateHelper from "../Utilities/DateHelper";
 import MathHelper from "../Utilities/MathHelper";
@@ -13,7 +9,7 @@ class Ledger {
   addEntry(
     date: number,
     action: TransactionType,
-    share: TransactionCompany,
+    share: Stocks,
     numShares: number,
     unitPrice: number,
     portfolioAmount: number

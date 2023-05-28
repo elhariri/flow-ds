@@ -1,4 +1,4 @@
-import { TransactionCompany, TransactionType } from "../../../../index.types";
+import { Stocks, TransactionType } from "../../../../index.types";
 import Portfolio from "../../../Shared/Portfolio/Portfolio";
 import DecisionsEnumerator from "../DecisionsEnumerator";
 import comparePossibilities from "../testHelper";
@@ -113,7 +113,7 @@ it("should enumerate all possible decisions given the but and sell prices of bot
   );
   const expectedResult4: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[][] = [
     [
@@ -175,7 +175,7 @@ it("should enumerate all possible decisions given the but and sell prices of bot
   );
   const expectedResult5: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[][] = [
     [

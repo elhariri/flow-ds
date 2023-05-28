@@ -1,9 +1,9 @@
-import { TransactionCompany, TransactionType } from "../../../index.types";
+import { Stocks, TransactionType } from "../../../index.types";
 
 class Decision {
   static testIfValid(
     type: TransactionType,
-    name: TransactionCompany,
+    name: Stocks,
 
     numShares: number,
     unitPrice: number

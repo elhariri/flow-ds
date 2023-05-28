@@ -1,12 +1,12 @@
 import Config from "../../../config";
-import { TransactionCompany } from "../../../index.types";
+import { Stocks } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import { Datapoint } from "../index.types";
 
 class OutcomesGenerator {
   private static canBuy(
     portfolio: Portfolio,
-    stock: TransactionCompany,
+    stock: Stocks,
     dataPoint: Datapoint
   ): boolean {
     return (
@@ -17,7 +17,7 @@ class OutcomesGenerator {
 
   private static shouldSell(
     portfolio: Portfolio,
-    stock: TransactionCompany,
+    stock: Stocks,
     dataPoint: Datapoint
   ): boolean {
     return (
@@ -29,10 +29,10 @@ class OutcomesGenerator {
   private static sellAllSellableStocks(
     portfolio: Portfolio,
     dataPoint: Datapoint
-  ): { outcomePortfolio: Portfolio; selledStocks: TransactionCompany[] } {
+  ): { outcomePortfolio: Portfolio; selledStocks: Stocks[] } {
     const outcomePortfolio = portfolio.clone();
 
-    const selledStocks: TransactionCompany[] = [];
+    const selledStocks: Stocks[] = [];
 
     for (let i = 0; i < Config.Stocks.length; i += 1) {
       const stock = Config.Stocks[i];
@@ -54,8 +54,8 @@ class OutcomesGenerator {
   private static findAllBuyableStocks(
     portfolio: Portfolio,
     dataPoint: Datapoint
-  ): TransactionCompany[] {
-    const buyableStocks: TransactionCompany[] = [];
+  ): Stocks[] {
+    const buyableStocks: Stocks[] = [];
 
     for (let i = 0; i < Config.Stocks.length; i += 1) {
       const stock = Config.Stocks[i];
@@ -71,8 +71,8 @@ class OutcomesGenerator {
   private static generateOutcomesAfterBuying(
     portfolio: Portfolio,
     dataPoint: Datapoint,
-    buyableStocks: TransactionCompany[],
-    selledStocks: TransactionCompany[]
+    buyableStocks: Stocks[],
+    selledStocks: Stocks[]
   ): Portfolio[] {
     const outcomes: Portfolio[] = [];
 

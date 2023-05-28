@@ -1,16 +1,16 @@
-import { TransactionCompany, TransactionType } from "../../../index.types";
+import { Stocks, TransactionType } from "../../../index.types";
 
 // function thst compares two possibilities
 
 export function compareTwoPossibilities(
   expectedResult: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[],
   actualResult: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[]
 ) {
@@ -37,12 +37,12 @@ export function compareTwoPossibilities(
 export default function comparePossibilities(
   expectedResult: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[][],
   actualResult: {
     type: TransactionType;
-    share: TransactionCompany;
+    share: Stocks;
     amount: number;
   }[][]
 ) {

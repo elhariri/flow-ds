@@ -1,4 +1,4 @@
-import { DailyStockPrices, TransactionCompany } from "../../../index.types";
+import { DailyStockPrices, Stocks } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import LocalMinMaxFilter from "../LocalMinMaxFilter/LocalMinMaxFilter";
 import {
@@ -9,7 +9,7 @@ import {
 class DecisionsEnumerator {
   private static findPossibilitiesOnOneShare(
     portfolio: Portfolio,
-    stockName: TransactionCompany,
+    stockName: Stocks,
     date: number,
     stockPossibleActions: StockDayAction[]
   ) {
@@ -65,7 +65,7 @@ class DecisionsEnumerator {
         const newPortfolio = portfolio.clone();
 
         if (googleAction.action !== amazonAction.action) {
-          let actionToBuy: TransactionCompany = "GOOGLE";
+          let actionToBuy: Stocks = "GOOGLE";
 
           if (
             googleAction.action === "VENTE" &&

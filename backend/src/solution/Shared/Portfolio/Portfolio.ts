@@ -1,5 +1,5 @@
 import Config from "../../../config";
-import { TransactionCompany } from "../../../index.types";
+import { Stocks } from "../../../index.types";
 import Decision from "../Decision/Decision";
 import Ledger from "../Ledger/Leger";
 import MathHelper from "../Utilities/MathHelper";
@@ -40,7 +40,7 @@ class Portfolio {
   }
 
   buyShares(
-    name: TransactionCompany,
+    name: Stocks,
     numShares: number,
     unitPrice: number,
     date: number
@@ -62,11 +62,7 @@ class Portfolio {
     );
   }
 
-  buyMaxShares(
-    company: TransactionCompany,
-    unitPrice: number,
-    date: number
-  ): boolean {
+  buyMaxShares(company: Stocks, unitPrice: number, date: number): boolean {
     const maxShares = MathHelper.maxAmountToBuy(this.cashAmount, unitPrice);
     if (maxShares > 0) {
       this.buyShares(company, maxShares, unitPrice, date);
@@ -77,7 +73,7 @@ class Portfolio {
   }
 
   sellShares(
-    name: TransactionCompany,
+    name: Stocks,
     numShares: number,
     unitPrice: number,
     date: number
@@ -116,7 +112,7 @@ class Portfolio {
     }
   }
 
-  sellAllOf(share: TransactionCompany, sellPrice: number, date: number) {
+  sellAllOf(share: Stocks, sellPrice: number, date: number) {
     if (this.totalShares[share] > 0) {
       this.sellShares(share, this.totalShares[share], sellPrice, date);
     }
