@@ -5,6 +5,12 @@ export type StockDayAction = {
   price: number;
 };
 
-export type DataPoint = { [key in Stocks]: StockDayAction[] } & {
+export type Datapoint = {
   date: number;
+  prices: {
+    [key in Stocks]: {
+      buyPrice: number;
+      sellPrice: number;
+    };
+  };
 };

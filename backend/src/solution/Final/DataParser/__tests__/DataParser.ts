@@ -123,7 +123,7 @@ it("should given google and amazon daily prices return the local min max and pos
     },
   ];
 
-  const result = DataParser.filter(googleStocks1, amazonStocks1);
+  const result = DataParser.buildDataPoints(googleStocks1, amazonStocks1);
 
   expect(JSON.stringify(result)).toEqual(JSON.stringify(expected));
 });
@@ -144,9 +144,9 @@ it("should throw an error if the stocks are not of the same length", () => {
 
   const googleStocks1: DailyStockPrices[] = [];
 
-  expect(() => DataParser.filter(googleStocks1, amazonStocks1)).toThrowError(
-    "Stocks must have the same length"
-  );
+  expect(() =>
+    DataParser.buildDataPoints(googleStocks1, amazonStocks1)
+  ).toThrowError("Stocks must have the same length");
 });
 
 it("should throw an error if the stocks length are inferior to 2", () => {
@@ -176,7 +176,7 @@ it("should throw an error if the stocks length are inferior to 2", () => {
     },
   ];
 
-  expect(() => DataParser.filter(googleStocks1, amazonStocks1)).toThrowError(
-    "Stocks must have at least 2 data points"
-  );
+  expect(() =>
+    DataParser.buildDataPoints(googleStocks1, amazonStocks1)
+  ).toThrowError("Stocks must have at least 2 data points");
 });

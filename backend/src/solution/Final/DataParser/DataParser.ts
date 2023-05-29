@@ -1,5 +1,5 @@
 import { DailyStockPrices } from "../../../index.types";
-import { Datapoint } from "../index.types";
+import { Datapoint } from "./DataParser.types";
 
 class DataParser {
   private static areValidStocksInputs(
@@ -34,28 +34,17 @@ class DataParser {
     };
   }
 
-  public static filter(
+  public static buildDataPoints(
     googleStocks: DailyStockPrices[],
     amazonStocks: DailyStockPrices[]
   ) {
     this.areValidStocksInputs(googleStocks, amazonStocks);
 
-    const dataLength = googleStocks.length;
-
     const dataPoints: Datapoint[] = [];
 
-    dataPoints.push(this.buildDataPoint(googleStocks[0], amazonStocks[0]));
-
-    for (let i = 1; i < dataLength - 1; i += 1) {
+    for (let i = 0; i < googleStocks.length; i += 1) {
       dataPoints.push(this.buildDataPoint(googleStocks[i], amazonStocks[i]));
     }
-
-    dataPoints.push(
-      this.buildDataPoint(
-        googleStocks[dataLength - 1],
-        amazonStocks[dataLength - 1]
-      )
-    );
 
     return dataPoints;
   }

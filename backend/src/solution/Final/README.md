@@ -1,3 +1,9 @@
+## NOW
+
+The nature of the data make it htat a lot of useases that i thought about at first are not existant a much simpler solution is enough
+
+## AT FIRST
+
 The problem is quite challenging. I am uncertain if I can find a solution that accurately determines the maximum profit. Therefore, I will attempt to simplify the challenge initially to find a suitable initial solution.
 
 ## Though process

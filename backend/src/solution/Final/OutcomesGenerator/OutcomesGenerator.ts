@@ -1,7 +1,7 @@
 import Config from "../../../config";
 import { Stocks } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
-import { Datapoint } from "../index.types";
+import { Datapoint } from "../DataParser/DataParser.types";
 
 class OutcomesGenerator {
   private static sellStock(

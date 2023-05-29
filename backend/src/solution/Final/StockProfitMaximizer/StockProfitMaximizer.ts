@@ -1,35 +1,26 @@
 import { DailyStockPrices } from "../../../index.types";
 import Portfolio from "../../Shared/Portfolio/Portfolio";
 import DataParser from "../DataParser/DataParser";
+import { Datapoint } from "../DataParser/DataParser.types";
 import OutcomesGenerator from "../OutcomesGenerator/OutcomesGenerator";
-import { Datapoint } from "../index.types";
 
 class DecisionsEnumerator {
-  private static filterWeakPortfolios(portfolios: Portfolio[]) {
+  private static filterWeakCashOnlyPortfolios(portfolios: Portfolio[]) {
     const filteredPortfolios: Portfolio[] = [];
-    const cashOnlyPortfolios: Portfolio[] = [];
+
+    let maxPortfolio: Portfolio = new Portfolio(0);
 
     for (let j = 0; j < portfolios.length; j += 1) {
       const portfolio = portfolios[j];
+
       if (portfolio.googleShares + portfolio.amazonShares > 0) {
         filteredPortfolios.push(portfolio);
-      } else {
-        cashOnlyPortfolios.push(portfolio);
+      } else if (portfolio.cashAmount > maxPortfolio.cashAmount) {
+        maxPortfolio = portfolio;
       }
     }
 
-    let maxPortfolio = cashOnlyPortfolios[0];
-
-    if (maxPortfolio) {
-      for (let j = 1; j < cashOnlyPortfolios.length; j += 1) {
-        const portfolio = cashOnlyPortfolios[j];
-        if (portfolio.cashAmount > maxPortfolio.cashAmount) {
-          maxPortfolio = portfolio;
-        }
-      }
-
-      filteredPortfolios.push(maxPortfolio);
-    }
+    filteredPortfolios.push(maxPortfolio);
 
     return filteredPortfolios;
   }
@@ -40,13 +31,10 @@ class DecisionsEnumerator {
   ) {
     const { prices, date } = dataPoint;
 
-    let maxProfit = 0;
     let maxProfitPortfolio = portfolios[0];
 
     const googleFinalDaySellPrice = prices.GOOGLE.sellPrice;
     const amazonFinalDaySellPrice = prices.AMAZON.sellPrice;
-
-    const finalDayDate = date;
 
     for (let i = 0; i < portfolios.length; i += 1) {
       const portfolio = portfolios[i];
@@ -54,13 +42,10 @@ class DecisionsEnumerator {
       portfolio.sellAllShares(
         googleFinalDaySellPrice,
         amazonFinalDaySellPrice,
-        finalDayDate
+        date
       );
 
-      const profit = portfolio.getProfit();
-
-      if (profit > maxProfit) {
-        maxProfit = profit;
+      if (portfolio.getProfit() > maxProfitPortfolio.getProfit()) {
         maxProfitPortfolio = portfolio;
       }
     }
@@ -72,7 +57,7 @@ class DecisionsEnumerator {
     googlePrices: DailyStockPrices[],
     amazonPrices: DailyStockPrices[]
   ) {
-    const dataPoints = DataParser.filter(googlePrices, amazonPrices);
+    const dataPoints = DataParser.buildDataPoints(googlePrices, amazonPrices);
 
     let outcomes: Portfolio[] = [new Portfolio()];
 
@@ -80,7 +65,7 @@ class DecisionsEnumerator {
       const dataPoint = dataPoints[i];
 
       outcomes = OutcomesGenerator.from(outcomes, dataPoint);
-      outcomes = this.filterWeakPortfolios(outcomes);
+      outcomes = this.filterWeakCashOnlyPortfolios(outcomes);
     }
 
     const lastDataPoint = dataPoints[dataPoints.length - 1];
