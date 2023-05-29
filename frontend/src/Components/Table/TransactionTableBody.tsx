@@ -20,7 +20,7 @@ export default function TransactionTableBody({
           <ActionCell action={transaction.action} />
           <StockImgCell stock={transaction.name} />
           <td>{transaction.unit_price} €</td>
-          <td>{transaction.num_shares}</td>
+          <td>{formatPrice(transaction.num_shares)}</td>
           <td className="hidden md:table-cell">
             {formatPrice(transaction.total)} €
           </td>

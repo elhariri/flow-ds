@@ -25,10 +25,16 @@ class OutcomesGenerator {
     for (let j = 0; j < portfolios.length; j += 1) {
       const portfolio = portfolios[j].clone();
 
-      const portfolioTotalShares =
-        portfolio.amazonShares + portfolio.googleShares;
+      let portfolioTotalShares = 0;
+
+      for (let i = 0; i < Config.Stocks.length; i += 1) {
+        const stock = Config.Stocks[i];
+
+        portfolioTotalShares += portfolio.totalShares[stock];
+      }
 
       if (portfolioTotalShares > 0) {
+        // buy stock and create an outcome for each one of them
         for (let i = 0; i < Config.Stocks.length; i += 1) {
           const stock = Config.Stocks[i];
 
@@ -39,10 +45,10 @@ class OutcomesGenerator {
               (currStock) => currStock !== stock
             );
 
+            // ceate an outcome for each stock that can be bought with the money
             for (let k = 0; k < leftStocks.length; k += 1) {
               const leftStock = leftStocks[k];
               const stockPortfolio = portfolio.clone();
-              const { buyPrice } = dataPoint.prices[leftStock];
 
               this.sellStock(
                 stockPortfolio,
@@ -50,7 +56,7 @@ class OutcomesGenerator {
                 leftStock,
                 date,
                 sellPrice,
-                buyPrice
+                dataPoint.prices[leftStock].buyPrice
               );
 
               newPortfolios.push(stockPortfolio);
@@ -58,6 +64,7 @@ class OutcomesGenerator {
           }
         }
       } else {
+        // if no stocks are owned, create an outcome for buying each stock
         for (let i = 0; i < Config.Stocks.length; i += 1) {
           const stock = Config.Stocks[i];
           const stockPortfolio = portfolio.clone();

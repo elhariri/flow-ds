@@ -22,8 +22,8 @@ function App() {
         </span>
       </header>
       <div className="flex-1 px-4 md:px-32 flex overflow-hidden text-black">
-        <div className="flex-1 flex flex-col my-12">
-          <div className="flex flex-col md:flex-row mb-4">
+        <div className="flex-1 flex flex-col my-6 md:my-12">
+          <div className="flex flex-col md:flex-row mb-6 md:mb-4">
             <div className="my-auto font-bold text-sm md:text-lg">
               List des achats et ventes quotidien d&apos;Erwan:
             </div>
