@@ -9,16 +9,17 @@ export type Stocks = (typeof Config.Stocks)[number];
 export type ExecutionTime = {
   seconds: number;
   minutes: number;
+  milliseconds: number;
 };
 
 export type Transaction = {
   date: string;
   action: TransactionType;
   name: Stocks;
-  unit_price: number;
-  num_shares: number;
+  unitPrice: number;
+  numShares: number;
   total: number;
-  portfolio_amount: number;
+  portfolioAmount: number;
 };
 
 export type ServerSuccessfullResponseBody = {

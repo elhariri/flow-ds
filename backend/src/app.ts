@@ -2,7 +2,12 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 
-import FinalSolution from ".";
+import {
+  Exo1Solution,
+  Exo2AmazonSolution,
+  Exo2BothSharesSolution,
+  Exo2GoogleSolution,
+} from ".";
 
 const app = express();
 const port = 3000;
@@ -10,7 +15,19 @@ const port = 3000;
 app.use(cors());
 
 app.get("/", (req: Request, res: Response) =>
-  res.json({ body: JSON.stringify(FinalSolution()) })
+  res.json({ body: JSON.stringify(Exo1Solution()) })
+);
+
+app.get("/exo2/google", (req: Request, res: Response) =>
+  res.json({ body: JSON.stringify(Exo2GoogleSolution()) })
+);
+
+app.get("/exo2/amazon", (req: Request, res: Response) =>
+  res.json({ body: JSON.stringify(Exo2AmazonSolution()) })
+);
+
+app.get("/exo2/both", (req: Request, res: Response) =>
+  res.json({ body: JSON.stringify(Exo2BothSharesSolution()) })
 );
 
 app.listen(port, () => {

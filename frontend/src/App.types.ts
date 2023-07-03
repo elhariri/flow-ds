@@ -4,6 +4,7 @@ export type TransactionCompany = "GOOGLE" | "AMAZON";
 export type ExecutionTime = {
   seconds: number;
   minutes: number;
+  milliseconds: number;
 };
 
 export type Transaction = {

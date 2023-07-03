@@ -17,7 +17,8 @@ export default function ExecutionTimeView({
         />
       ) : (
         <strong>
-          {time?.minutes} minutes et {time?.seconds} secondes
+          {time?.minutes} minutes, {time?.seconds} secondes et{" "}
+          {time?.milliseconds} millisecondes
         </strong>
       )}
     </div>
