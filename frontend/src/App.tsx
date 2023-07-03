@@ -1,3 +1,4 @@
+import DropDown from "./Components/DropDown/DropDown";
 import ExecutionTime from "./Components/ExecutionTime/ExecutionTime";
 import TransactionsTable from "./Components/Table/TransactionsTable";
 import TableText from "./Components/TableText/TableText";
@@ -5,7 +6,7 @@ import TableText from "./Components/TableText/TableText";
 import useGetTransactions from "./Hooks/useGetTransactions";
 
 function App() {
-  const { loading, error, response } = useGetTransactions();
+  const { loading, error, response, fetchTransactions } = useGetTransactions();
 
   if (error !== null) {
     return (
@@ -18,10 +19,12 @@ function App() {
   return (
     <>
       <header className="flex bg-blue-950 text-white h-16 px-4 md:px-32 border-b border-b-zinc-100 text-xl md:text-3xl">
-        <span className="my-auto">
+        <span className="my-auto mr-auto">
           Meilleur moment pour acheter ou pour vendre
         </span>
+        <DropDown onSelect={fetchTransactions} />
       </header>
+
       <div className="flex-1 px-4 md:px-32 flex overflow-hidden text-black">
         <div className="flex-1 flex flex-col my-6 md:my-12">
           <TableText loading={loading} response={response} />

@@ -19,13 +19,13 @@ export default function TransactionTableBody({
           <DateCell date={transaction.date} />
           <ActionCell action={transaction.action} />
           <StockImgCell stock={transaction.name} />
-          <td>{transaction.unit_price} €</td>
-          <td>{formatPrice(transaction.num_shares)}</td>
+          <td>{transaction.unitPrice} €</td>
+          <td>{formatPrice(transaction.numShares)}</td>
           <td className="hidden md:table-cell">
             {formatPrice(transaction.total)} €
           </td>
           <td>
-            <strong>{formatPrice(transaction.portfolio_amount)}</strong> €
+            <strong>{formatPrice(transaction.portfolioAmount)}</strong> €
           </td>
         </tr>
       ))}

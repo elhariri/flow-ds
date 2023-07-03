@@ -9,19 +9,6 @@ import App from "../App";
 afterEach(cleanup);
 
 describe("UI tests", () => {
-  test("Check if the static texts are all displayed", () => {
-    render(<App />);
-    expect(
-      screen.getByText("Meilleur moment pour acheter ou pour vendre")
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText("List des achats et ventes quotidien d'Erwan:")
-    ).toBeInTheDocument();
-    const regex = /Temps total d'exécution : \d+ minutes et \d+ secondes/i;
-    expect(screen.getByText(regex)).toBeInTheDocument();
-  });
-
   test("renders a table component", () => {
     render(<App />);
     const tableComponent = screen.getByRole("table");
@@ -37,7 +24,7 @@ describe("UI tests", () => {
   });
 });
 
-describe.only("Server call", () => {
+describe("Server call", () => {
   const server = setupServer(
     rest.get("/", (_req, res, ctx) =>
       res(
@@ -52,7 +39,7 @@ describe.only("Server call", () => {
     )
   );
 
-  beforeAll(() => server.listen());
+  beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
@@ -61,6 +48,7 @@ describe.only("Server call", () => {
 
     expect(screen.getByTestId("table-body-loader")).toBeInTheDocument();
     expect(screen.getByTestId("execution-time-loader")).toBeInTheDocument();
+    expect(screen.getByTestId("profit-loader")).toBeInTheDocument();
   });
 
   test("check if an error screen is displayed when the server returns an error", async () => {
@@ -88,5 +76,21 @@ describe.only("Server call", () => {
     expect(
       screen.queryByText("Oops something bad happened!!")
     ).not.toBeInTheDocument();
+  });
+
+  test("Check if the texts are all displayed", async () => {
+    const { findByText } = render(<App />);
+    expect(
+      screen.getByText("Meilleur moment pour acheter ou pour vendre")
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText("List des achats et ventes quotidien d'Erwan:")
+    ).toBeInTheDocument();
+
+    expect(screen.getByText("Temps total d'exécution :")).toBeInTheDocument();
+
+    const regex = /\d+ minutes et \d+ secondes/i;
+    expect(await findByText(regex)).toBeInTheDocument();
   });
 });

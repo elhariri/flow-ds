@@ -10,10 +10,10 @@ export type Transaction = {
   date: string;
   action: TransactionType;
   name: TransactionCompany;
-  unit_price: number;
-  num_shares: number;
+  unitPrice: number;
+  numShares: number;
   total: number;
-  portfolio_amount: number;
+  portfolioAmount: number;
 };
 
 export type ServerSuccessfullResponseBody = {

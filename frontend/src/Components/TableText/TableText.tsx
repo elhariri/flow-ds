@@ -21,7 +21,7 @@ export default function TableText({
           </span>
         ) : (
           <div
-            data-testid="execution-time-loader"
+            data-testid="profit-loader"
             className="h-4 ml-2 bg-zinc-100 my-auto rounded-full w-40 animate-pulse "
           />
         )}
