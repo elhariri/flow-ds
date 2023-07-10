@@ -9,22 +9,24 @@ export function findBuyAndSellIndexes(prices: DailyStockPrices[]): {
   profit: number;
 } {
   let buyIndex = 0;
+  let minIndex = 0;
   let sellIndex = 1;
   let counter = 1;
   let maxProfit = 0;
 
   while (counter < prices.length) {
     if (
-      prices[buyIndex].lowestPriceOfTheDay < prices[counter].lowestPriceOfTheDay
+      prices[minIndex].lowestPriceOfTheDay < prices[counter].lowestPriceOfTheDay
     ) {
       const profit =
         prices[counter].highestPriceOfTheDay -
-        prices[buyIndex].lowestPriceOfTheDay;
+        prices[minIndex].lowestPriceOfTheDay;
 
       maxProfit = Math.max(maxProfit, profit);
       sellIndex = counter;
+      buyIndex = minIndex;
     } else {
-      buyIndex = counter;
+      minIndex = counter;
     }
     counter += 1;
   }
