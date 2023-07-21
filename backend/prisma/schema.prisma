@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id       Int      @id @default(autoincrement())
+  name     String   @unique
+  // Define a one-to-many relationship with 'StockPrice' table
+  stockPrices DailyStockPrice[]
+
+    @@index([ name ])
+}
+
+// Data model for the 'stock_prices' table
+model DailyStockPrice {
+  id            Int      @id @default(autoincrement())
+  date          Int
+  lowestPrice   Float
+  highestPrice  Float
+  // Define a foreign key relationship with 'Company' table
+  companyId     Int
+  company       Company  @relation(fields: [companyId], references: [id])
+
+  @@index([companyId])
+}
