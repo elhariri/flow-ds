@@ -8,6 +8,6 @@ export type FailedResponse<TError> = {
   error: TError;
 };
 
-export type Response<TSuccessData, TError> =
+export type ControllerResponse<TSuccessData, TError> =
   | SuccessfulResponse<TSuccessData>
   | FailedResponse<TError>;

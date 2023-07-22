@@ -1,4 +1,11 @@
-import { FailedResponse, Response, SuccessfulResponse } from "./Response.types";
+import { Response as ExpressResponse } from "express";
+
+import {
+  FailedResponse,
+  ControllerResponse,
+  SuccessfulResponse,
+} from "./Response.types";
+import ApplicationError from "../../Helpers/ApplicationError";
 
 export function SuccessfulResponseBuilder<TData>(
   data: TData
@@ -18,17 +25,31 @@ export function FailedResponseBuilder<TData>(
   };
 }
 
-export async function ResponseBuilder<TData>(
+export async function ExpressResponseBuilder<TData>(
+  response: ExpressResponse<ControllerResponse<TData, string>>,
   controller: () => Promise<TData>,
   errorMsg?: string
-): Promise<Response<TData, string>> {
+): Promise<ExpressResponse<ControllerResponse<TData, string>>> {
   try {
-    return SuccessfulResponseBuilder(await controller());
-  } catch (error) {
+    return response
+      .status(200)
+      .json(SuccessfulResponseBuilder(await controller()));
+  } catch (error: any) {
     // eslint-disable-next-line no-console
     console.error(error);
-    return FailedResponseBuilder(
-      JSON.stringify(`Oops an error occured: ${errorMsg}`)
-    );
+
+    if (error instanceof ApplicationError) {
+      return response
+        .status(error.status)
+        .json(FailedResponseBuilder(error.message));
+    }
+
+    return response
+      .status(500)
+      .json(
+        FailedResponseBuilder(
+          JSON.stringify(`Oops an error occured: ${errorMsg}`)
+        )
+      );
   }
 }

@@ -1,31 +1,15 @@
-/* eslint-disable import/prefer-default-export */
-import express, { Request, Response } from "express";
+import express from "express";
 
 import cors from "cors";
-import CompanyController from "./Controllers/Company.Controller";
 import DBClient from "./Models/Database/Client/DBClient";
-import DailyStockPricesController from "./Controllers/DailyStockPrices.Controller";
+import AppRouter from "./Routes/Router";
 
 const app = express();
 const port = 3000;
 
 app.use(cors());
 
-app.get("/", async (req: Request, res: Response) =>
-  res.json({
-    body: JSON.stringify(await CompanyController.getAllCompanies()),
-  })
-);
-
-app.get("/optimalSolution/:company", async (req: Request, res: Response) =>
-  res.json({
-    body: JSON.stringify(
-      await DailyStockPricesController.getCompanyOptimalSolution(
-        req.params.company
-      )
-    ),
-  })
-);
+AppRouter(app);
 
 app.listen(port, () => {
   // eslint-disable-next-line no-console

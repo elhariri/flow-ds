@@ -1,4 +1,4 @@
-import { DailyStockPrice } from "../../Types/Model.types";
+import { DailyStockPrice } from "../../../Types/Model.types";
 import DailyStockPriceBuilder from "./DailyStockPriceBuilder";
 
 export default function StockPricesBuilder(

@@ -1,7 +1,7 @@
 import fs from "fs";
 
-import Timer from "./Helpers/Timer/Timer";
 import FindMaxProfit from "./Application/FindMaxProfit";
+import Timer from "./Application/Helpers/Timer/Timer";
 
 function Exo2SolutionWrapper(company: string) {
   const shareStockPrices = JSON.parse(
