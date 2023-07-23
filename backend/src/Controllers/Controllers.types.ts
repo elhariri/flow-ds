@@ -1,4 +1,4 @@
-import { Request, Response as ExpressResponse, Response } from "express";
+import { Request, Response } from "express";
 import { ControllerResponse } from "./Helpers/Response.types";
 
 export type ExpressControllerResponse<TSuccessfulResponse, TFailedResponse> =
@@ -6,5 +6,5 @@ export type ExpressControllerResponse<TSuccessfulResponse, TFailedResponse> =
 
 export type ExpressController<TSuccessfulResponse, TFailedResponse> = (
   req: Request,
-  res: ExpressResponse
+  res: Response
 ) => Promise<ExpressControllerResponse<TSuccessfulResponse, TFailedResponse>>;

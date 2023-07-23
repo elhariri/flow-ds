@@ -1,12 +1,12 @@
 import CompanyModel from "../Models/Company.Model";
-import { DailyStockPrice } from "../Types/Model.types";
+import { ServerSuccessfullResponseBody } from "../index.types";
 import { ExpressController } from "./Controllers.types";
 import { ExpressResponseBuilder } from "./Helpers/ResponseBuilder";
 
-export const getAllCompanies: ExpressController<string[], string> = async (
-  _req,
-  res
-) =>
+export const getAllCompanies: ExpressController<
+  { name: string; value: number }[],
+  string
+> = async (_req, res) =>
   ExpressResponseBuilder(
     res,
     CompanyModel.getAllCompanies,
@@ -14,7 +14,7 @@ export const getAllCompanies: ExpressController<string[], string> = async (
   );
 
 export const getCompanyOptimalSolution: ExpressController<
-  DailyStockPrice[],
+  ServerSuccessfullResponseBody,
   string
 > = async (req, res) =>
   ExpressResponseBuilder(

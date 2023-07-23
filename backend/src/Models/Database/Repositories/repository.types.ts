@@ -34,12 +34,16 @@ export interface Repository<TValues, TReadOptions = any, TUpdateOptions = any> {
 
 // TO-DO
 
-type ValuesWithId<TValues> = TValues & { id: number };
+export type SchemaType<TValues, TRefrences extends {} = {}> = TValues & {
+  id: number;
+} & TRefrences;
 
-export type PartialValuesWithId<TValues> = Partial<ValuesWithId<TValues>>;
+export type PartialValuesWithId<TValues, TRefrences extends {} = {}> = Partial<
+  SchemaType<TValues, TRefrences>
+>;
 
-type SelectedKeys<TValues> = {
-  [K in keyof PartialValuesWithId<TValues>]?: boolean;
+type SelectedKeys<TValues, TRefrences extends {} = {}> = {
+  [K in keyof PartialValuesWithId<TValues, TRefrences>]?: boolean;
 };
 
 export type PrismaReadOptions<TValues> = {
@@ -57,7 +61,7 @@ export type PrismaUpdateOptions<TValues> = {
   select?: SelectedKeys<TValues>;
   include?: SelectedKeys<TValues>;
   data: any;
-  where: ValuesWithId<TValues>;
+  where: SchemaType<TValues>;
 };
 
 export type PrismaDelegate<TValues> = {

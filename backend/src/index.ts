@@ -1,7 +1,7 @@
 import fs from "fs";
 
-import FindMaxProfit from "./Application/FindMaxProfit";
 import Timer from "./Application/Helpers/Timer/Timer";
+import ProfitOptimizer from "./Application/ProfitOptimizer";
 
 function Exo2SolutionWrapper(company: string) {
   const shareStockPrices = JSON.parse(
@@ -14,7 +14,7 @@ function Exo2SolutionWrapper(company: string) {
   const timer = new Timer();
 
   timer.start();
-  const result = FindMaxProfit(shareStockPrices);
+  const result = ProfitOptimizer.FindMaxProfit(shareStockPrices);
   timer.stop();
 
   return {

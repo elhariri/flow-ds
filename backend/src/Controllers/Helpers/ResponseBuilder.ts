@@ -7,12 +7,12 @@ import {
 } from "./Response.types";
 import ApplicationError from "../../Helpers/ApplicationError";
 
-export function SuccessfulResponseBuilder<TData>(
-  data: TData
-): SuccessfulResponse<TData> {
+export function SuccessfulResponseBuilder<TResponse>(
+  result: TResponse
+): SuccessfulResponse<TResponse> {
   return {
     success: true,
-    data,
+    result,
   };
 }
 
@@ -31,9 +31,9 @@ export async function ExpressResponseBuilder<TData>(
   errorMsg?: string
 ): Promise<ExpressResponse<ControllerResponse<TData, string>>> {
   try {
-    return response
-      .status(200)
-      .json(SuccessfulResponseBuilder(await controller()));
+    const result = await controller();
+
+    return response.status(200).json(SuccessfulResponseBuilder(result));
   } catch (error: any) {
     // eslint-disable-next-line no-console
     console.error(error);

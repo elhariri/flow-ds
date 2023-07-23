@@ -93,7 +93,7 @@ describe("Profit Optimizer", () => {
       // then
     } catch (e: any) {
       expect(e instanceof Error).toEqual(true);
-      expect(e.message).toEqual("Prices cannot be negative");
+      expect(e.message).toEqual("Prices cannot be null or negative");
     }
   });
 

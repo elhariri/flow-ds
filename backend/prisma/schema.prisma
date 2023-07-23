@@ -22,7 +22,7 @@ model Company {
 // Data model for the 'stock_prices' table
 model DailyStockPrice {
   id            Int      @id @default(autoincrement())
-  date          Int
+  date          BigInt
   lowestPrice   Float
   highestPrice  Float
   // Define a foreign key relationship with 'Company' table

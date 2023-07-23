@@ -19,6 +19,7 @@ export type Transaction = {
 export type ServerSuccessfullResponseBody = {
   transactions: Transaction[];
   executionTime: ExecutionTime;
+  profit: number;
 };
 
 export type ServerSuccessfullResponse = {

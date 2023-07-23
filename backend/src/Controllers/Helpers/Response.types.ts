@@ -1,6 +1,6 @@
 export type SuccessfulResponse<TResponseData> = {
   success: true;
-  data: TResponseData;
+  result: TResponseData;
 };
 
 export type FailedResponse<TError> = {
