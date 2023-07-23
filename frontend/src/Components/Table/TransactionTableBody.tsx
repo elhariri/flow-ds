@@ -9,16 +9,28 @@ export default function TransactionTableBody({
 }: {
   transactions: Transaction[];
 }) {
+  if (transactions.length === 0) {
+    return (
+      <tbody>
+        <tr className="text-center border-b h-fit leading-[1] mx-auto py-8 cursor-pointer hover:bg-gray-50">
+          <td colSpan={6} className="py-8">
+            No transaction possible
+          </td>
+        </tr>
+      </tbody>
+    );
+  }
+
   return (
     <tbody>
       {transactions.map((transaction) => (
         <tr
-          key={transaction.name + transaction.date}
+          key={transaction.company + transaction.date}
           className="text-center border-b leading-[1] cursor-pointer hover:bg-gray-50"
         >
           <DateCell date={transaction.date} />
           <ActionCell action={transaction.action} />
-          <StockImgCell stock={transaction.name} />
+          <StockImgCell stock={transaction.company} />
           <td>{transaction.unitPrice} €</td>
           <td>{formatPrice(transaction.numShares)}</td>
           <td className="hidden md:table-cell">

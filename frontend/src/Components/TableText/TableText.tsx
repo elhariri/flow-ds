@@ -1,5 +1,6 @@
 import { ServerSuccessfullResponseBody } from "../../App.types";
-import formatPrice from "../../Helpers/formatPrice";
+
+import Profit from "./Profit";
 
 export default function TableText({
   loading,
@@ -15,16 +16,7 @@ export default function TableText({
       </div>
       <div className="flex md:ml-auto font-bold text-sm md:text-xl">
         <span className="my-auto">Profit:</span>
-        {!loading && response !== null ? (
-          <span className="text-emerald-500 bg-emerald-50 ml-1 h-fit border border-emerald-200 rounded px-2">
-            + {formatPrice(response.profit)} €
-          </span>
-        ) : (
-          <div
-            data-testid="profit-loader"
-            className="h-4 ml-2 bg-zinc-100 my-auto rounded-full w-40 animate-pulse "
-          />
-        )}
+        <Profit loading={loading} profit={response?.profit || 0} />
       </div>
     </div>
   );

@@ -7,6 +7,12 @@ const CompanyRouter = express.Router();
 // get the list of the companies
 CompanyRouter.get("/all", CompanyController.getAllCompanies);
 
+// get the optimal solution for all companies
+CompanyRouter.get(
+  "/optimal/all",
+  DailyStockPricesController.getAllCompaniesOptimalSolution
+);
+
 // get the optimal solution for a company
 CompanyRouter.get(
   "/optimal/:companyId",

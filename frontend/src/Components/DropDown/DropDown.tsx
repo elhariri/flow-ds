@@ -1,34 +1,21 @@
 import { useEffect, useState } from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { CompanyOption } from "../../App.types";
 
-const options = [
-  {
-    label: "Exo1",
-    value: "",
-  },
-  {
-    label: "Exo2: Google",
-    value: "exo2/google",
-  },
-  {
-    label: "Exo2: Amazon",
-
-    value: "exo2/amazon",
-  },
-  {
-    label: "Exo2: both",
-    value: "exo2/both",
-  },
-];
-
-type Option = (typeof options)[number];
-type OptionsValues = (typeof options)[number]["value"];
-
-function DropDown({ onSelect }: { onSelect: (value: OptionsValues) => void }) {
+function DropDown({
+  options = [],
+  onSelect,
+}: {
+  options: CompanyOption[];
+  onSelect: (value: string) => void;
+}) {
   const [showOptions, setOptionsVisibility] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
 
-  const handleSelect = (option: Option) => {
+  const [selectedOption, setSelectedOption] = useState<CompanyOption>(
+    options[0]
+  );
+
+  const handleSelect = (option: CompanyOption) => {
     setOptionsVisibility(false);
     setSelectedOption(option);
     onSelect(option.value);
@@ -53,7 +40,7 @@ function DropDown({ onSelect }: { onSelect: (value: OptionsValues) => void }) {
         className="option w-40 flex font-semibold p-2 border border-white rounded"
         onClick={() => setOptionsVisibility(!showOptions)}
       >
-        {selectedOption.label}
+        {selectedOption ? selectedOption.name : "No campany found"}
         <TiArrowSortedDown className="my-auto ml-auto" />
       </button>
       {showOptions && (
@@ -67,7 +54,7 @@ function DropDown({ onSelect }: { onSelect: (value: OptionsValues) => void }) {
                 handleSelect(option);
               }}
             >
-              {option.label}
+              {option.name}
             </button>
           ))}
         </div>

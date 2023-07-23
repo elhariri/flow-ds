@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { ServerSuccessfullResponseBody } from "../App.types";
 import config from "../config";
 
@@ -7,45 +7,48 @@ const useGetTransactions = (): {
   loading: boolean;
   error: unknown;
   response: ServerSuccessfullResponseBody | null;
-  fetchTransactions: (url?: string) => Promise<void>;
+  fetchTransactions: (companyId: string) => Promise<void>;
 } => {
-  const firstCallHandled = useRef(false);
-  const [isServerCallLoading, setIfServerCallLoading] = useState(true);
+  // const firstCallHandled = useRef(false);
+  const [isLoading, setIfLoading] = useState(true);
 
   const [error, setError] = useState<unknown>(null);
   const [response, setResponse] =
     useState<ServerSuccessfullResponseBody | null>(null);
 
-  const fetchTransactions = useCallback(async (url: string = "") => {
+  const fetchTransactions = useCallback(async (companyId: string = "1") => {
     try {
-      setIfServerCallLoading(true);
-      const { status, data } = await axios.get(`${config.serverUrl}/${url}`);
-
+      setIfLoading(true);
+      const { status, data } = await axios.get(
+        `${config.serverUrl}/company/optimal/${companyId}`
+      );
+      console.log(data);
       if (status === 200) {
-        const { success, result } = JSON.parse(data.body);
+        const { success, result, error: appError } = data;
+
         if (success) {
           setResponse(result);
         } else {
-          setError(result);
+          setError(appError);
         }
       } else {
-        setError(data.body);
+        setError(data.error);
       }
     } catch (err) {
       setError(err);
     }
 
-    setIfServerCallLoading(false);
+    setIfLoading(false);
   }, []);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (isServerCallLoading && !firstCallHandled.current) {
       firstCallHandled.current = true;
       fetchTransactions();
     }
-  }, [fetchTransactions, isServerCallLoading]);
+  }, [fetchTransactions, isServerCallLoading]); */
 
-  return { loading: isServerCallLoading, error, response, fetchTransactions };
+  return { loading: isLoading, error, response, fetchTransactions };
 };
 
 export default useGetTransactions;

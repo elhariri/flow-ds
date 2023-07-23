@@ -8,5 +8,9 @@ export default function formatPrice(amount: number) {
     integerPart = integerPart.replace(regex, "$1 $2");
   }
 
+  if (decimalPart.length === 0) {
+    return integerPart;
+  }
+
   return `${integerPart}.${decimalPart}`;
 }

@@ -1,10 +1,10 @@
 import DailyStockPricesModel from "../Models/DailyStockPrices.Model";
-// import { ServerSuccessfullResponseBody } from "../index.types";
+import { ServerSuccessfullResponseBody } from "../index.types";
 import { ExpressController } from "./Controllers.types";
 import { ExpressResponseBuilder } from "./Helpers/ResponseBuilder";
 
 export const getCompanyOptimalSolution: ExpressController<
-  any, // ServerSuccessfullResponseBody,
+  ServerSuccessfullResponseBody,
   string
 > = async (req, res) =>
   ExpressResponseBuilder(
@@ -16,4 +16,14 @@ export const getCompanyOptimalSolution: ExpressController<
     "While retrieving company optimal solution."
   );
 
-export default { getCompanyOptimalSolution };
+export const getAllCompaniesOptimalSolution: ExpressController<
+  ServerSuccessfullResponseBody,
+  string
+> = async (req, res) =>
+  ExpressResponseBuilder(
+    res,
+    DailyStockPricesModel.getAllCompaniesOptimalSolution,
+    "While retrieving all companies optimal solution."
+  );
+
+export default { getCompanyOptimalSolution, getAllCompaniesOptimalSolution };

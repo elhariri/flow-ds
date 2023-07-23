@@ -8,5 +8,8 @@ export const CompanyRepository = new RepositoryWrapper<SchemaType<Company>>(
 );
 
 export const DailyStockPriceRepository = new RepositoryWrapper<
-  SchemaType<DailyStockPrice, { companyId: number }>
+  SchemaType<
+    Omit<DailyStockPrice, "company">,
+    { companyId: number; company: Company }
+  >
 >(DBClient.dailyStockPrice);

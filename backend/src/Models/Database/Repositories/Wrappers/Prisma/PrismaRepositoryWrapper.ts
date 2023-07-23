@@ -36,13 +36,13 @@ class PrismaRepositoryWrapper<
     return this.prismaDelegate.delete(options);
   }
 
-  public async findAll(): Promise<TValues[]> {
-    return this.prismaDelegate.findMany();
+  public async findAll(options?: TReadOptions): Promise<TValues[]> {
+    return this.prismaDelegate.findMany(options);
   }
 
-  public async findById(id: string): Promise<TValues> {
+  public async findById(id: string | number): Promise<TValues> {
     const options = {
-      where: { id: parseInt(id, 10) },
+      where: { id: typeof id === "number" ? id : parseInt(id, 10) },
     } as {
       where: Pick<TValues & { id: number }, "id"> &
         Partial<TValues & { id: number }>;

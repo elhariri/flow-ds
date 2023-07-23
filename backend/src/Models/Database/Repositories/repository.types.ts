@@ -21,15 +21,15 @@ export interface Repository<TValues, TReadOptions = any, TUpdateOptions = any> {
     options: TUpdateOptions
   ): Promise<PutResponse<TValues>>;
 
-  deleteById(id: string): Promise<DeleteResponse>;
+  deleteById(id: string | number): Promise<DeleteResponse>;
 
   find(options: TReadOptions): Promise<TValues[]>;
 
   findOne(options: TReadOptions): Promise<TValues>;
 
-  findAll(): Promise<TValues[]>;
+  findAll(options: TReadOptions): Promise<TValues[]>;
 
-  findById(id: string): Promise<TValues>;
+  findById(id: string | number): Promise<TValues>;
 }
 
 // TO-DO

@@ -1,12 +1,21 @@
-import DropDown from "./Components/DropDown/DropDown";
-import ExecutionTime from "./Components/ExecutionTime/ExecutionTime";
-import TransactionsTable from "./Components/Table/TransactionsTable";
-import TableText from "./Components/TableText/TableText";
-
+import { useEffect } from "react";
+import Body from "./Components/Body/Body";
+import CompaniesList from "./Components/CompaniesList/CompaniesList";
+import useGetCompaniesList from "./Hooks/useGetCompaniesList";
 import useGetTransactions from "./Hooks/useGetTransactions";
 
 function App() {
-  const { loading, error, response, fetchTransactions } = useGetTransactions();
+  const { loading, error, response: companies } = useGetCompaniesList();
+  const {
+    fetchTransactions,
+    loading: transactionsLoading,
+    response: optimalProfit,
+  } = useGetTransactions();
+
+  useEffect(() => {
+    if (loading || !companies) return;
+    fetchTransactions(companies[0].value);
+  }, [companies, fetchTransactions, loading]);
 
   if (error !== null) {
     return (
@@ -22,22 +31,23 @@ function App() {
         <span className="my-auto mr-auto">
           Meilleur moment pour acheter ou pour vendre
         </span>
-        <DropDown onSelect={fetchTransactions} />
+        <CompaniesList
+          loading={loading}
+          fetchTransactions={fetchTransactions}
+          companies={companies || []}
+        />
       </header>
 
-      <div className="flex-1 px-4 md:px-32 flex overflow-hidden text-black">
-        <div className="flex-1 flex flex-col my-6 md:my-12">
-          <TableText loading={loading} response={response} />
-          <div className="flex-1 overflow-hidden relative">
-            <TransactionsTable
-              loading={loading}
-              transactions={response === null ? [] : response.transactions}
-            />
-          </div>
+      {!loading && companies && companies.length === 0 && (
+        <span className="m-auto">No company found!</span>
+      )}
 
-          <ExecutionTime time={response?.executionTime} loading={loading} />
-        </div>
-      </div>
+      {!loading && companies && companies.length > 0 && (
+        <Body
+          isLoading={loading || transactionsLoading}
+          result={optimalProfit}
+        />
+      )}
     </>
   );
 }
