@@ -1,45 +1,22 @@
-import Timer from "../Application/Helpers/Timer/Timer";
-import ProfitOptimizer from "../Application/ProfitOptimizer";
-import Error from "../Helpers/ApplicationError";
+import { Company } from "../Types/Model.types";
 import { CompanyRepository } from "./Database/Repositories/Repository";
+import { SchemaType } from "./Database/Repositories/repository.types";
 
+/**
+ * Represents a model for interacting with company data.
+ *
+ * @class
+ */
 class CompanyModel {
-  static async getAllCompanies() {
-    const companies = await CompanyRepository.findAll();
+  /**
+   * Retrieves all companies from the database and returns an array of company names and IDs.
+   *
+   * @static
+   * @returns {Promise<{ name: string; value: number }[]>} A Promise that resolves to an array of company names and IDs.
+   */
+  static async getAllCompanies(): Promise<{ name: string; value: number }[]> {
+    const companies: SchemaType<Company>[] = await CompanyRepository.findAll();
     return companies.map(({ name, id }) => ({ name, value: id }));
-  }
-
-  static async getCompanyOptimalSolution(companyName: string) {
-    const company = await CompanyRepository.findOne({
-      where: { name: companyName },
-      select: {
-        stockPrices: true,
-        name: true,
-      },
-    });
-
-    if (!company) {
-      throw new Error(404, `Company ${companyName} not found.`);
-    }
-
-    const stockPrices = (company.stockPrices || [])
-      .map((dailyStockPrice) => ({
-        ...dailyStockPrice,
-        company: companyName,
-        date: Number(dailyStockPrice.date),
-      }))
-      .sort((a, b) => a.date - b.date);
-
-    const timer = new Timer();
-
-    timer.start();
-    const result = ProfitOptimizer.FindMaxProfit(stockPrices);
-    timer.stop();
-
-    return {
-      ...result,
-      executionTime: timer.getElapsedTime(),
-    };
   }
 }
 

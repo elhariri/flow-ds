@@ -1,11 +1,15 @@
-import DailyStockPriceBuilder from "../Helpers/DailyStockPriceBuilder/DailyStockPriceBuilder";
+import StockPricesBuilder from "../../StockPricesBuilder/StockPricesBuilder";
+import TransactionsBuilder from "../TransactionsBuilder";
 
-import TransactionsBuilder from "../TransactionsBuilder/TransactionsBuilder";
-
-describe("Build transactions", () => {
-  it("should pass 1", () => {
-    const buyPrices = DailyStockPriceBuilder("GOOGLE", 1641186000000, 110, 110);
-    const sellPrices = DailyStockPriceBuilder(
+describe("TransactionsBuilder - Build Optimal Solution", () => {
+  it("should calculate correct transactions for a single buy and sell", () => {
+    const buyPrices = StockPricesBuilder.buildPoint(
+      "GOOGLE",
+      1641186000000,
+      110,
+      110
+    );
+    const sellPrices = StockPricesBuilder.buildPoint(
       "GOOGLE",
       1641272400000,
       600,

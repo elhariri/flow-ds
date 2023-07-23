@@ -22,7 +22,7 @@ const useGetTransactions = (): {
       const { status, data } = await axios.get(
         `${config.serverUrl}/company/optimal/${companyId}`
       );
-      console.log(data);
+
       if (status === 200) {
         const { success, result, error: appError } = data;
 

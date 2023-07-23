@@ -5,7 +5,7 @@ import {
   ControllerResponse,
   SuccessfulResponse,
 } from "./Response.types";
-import ApplicationError from "../../Helpers/ApplicationError";
+import ApplicationError from "../../Application/Helpers/ApplicationError/ApplicationError";
 
 export function SuccessfulResponseBuilder<TResponse>(
   result: TResponse
@@ -48,7 +48,7 @@ export async function ExpressResponseBuilder<TData>(
       .status(500)
       .json(
         FailedResponseBuilder(
-          JSON.stringify(`Oops an error occured: ${errorMsg}`)
+          JSON.stringify(`Oops an error occured ${errorMsg}`)
         )
       );
   }

@@ -1,8 +1,8 @@
-import { Transaction, TransactionType } from "../../index.types";
-import DateHelper from "../Helpers/DateHelper/DateHelper";
-import MathHelper from "../Helpers/MathHelper/MathHelper";
-import Config from "../../config";
-import { DailyStockPrice } from "../../Types/Model.types";
+import { Transaction, TransactionType } from "../../../index.types";
+import DateHelper from "../DateHelper/DateHelper";
+import MathHelper from "../MathHelper/MathHelper";
+import Config from "../../../config";
+import { DailyStockPrice } from "../../../Types/Model.types";
 
 export default class TransactionsBuilder {
   static build(

@@ -13,7 +13,7 @@ export const getCompanyOptimalSolution: ExpressController<
       DailyStockPricesModel.getCompanyOptimalSolution(
         parseInt(req.params.companyId, 10)
       ),
-    "While retrieving company optimal solution."
+    "while retrieving company optimal solution."
   );
 
 export const getAllCompaniesOptimalSolution: ExpressController<

@@ -1,5 +1,17 @@
+/**
+ * A utility class containing date formatting functions.
+ *
+ * @class
+ */
 class DateHelper {
-  static format(timestamp: number) {
+  /**
+   * Formats a Unix timestamp into a string with the format "DD/MM/YYYY".
+   *
+   * @static
+   * @param {number} timestamp - The Unix timestamp to be formatted.
+   * @returns {string} The formatted date string in the format "DD/MM/YYYY".
+   */
+  static format(timestamp: number): string {
     const date = new Date(timestamp);
 
     const day = date.getDate();

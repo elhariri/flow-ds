@@ -1,9 +1,9 @@
-import { DailyStockPrice } from "../../Types/Model.types";
-import DailyStockPriceBuilder from "../Helpers/DailyStockPriceBuilder/DailyStockPriceBuilder";
-import StockPricesBuilder from "../Helpers/DailyStockPriceBuilder/StockPricesBuilder";
+import { DailyStockPrice } from "../../../Types/Model.types";
+import StockPricesBuilder from "../../Helpers/StockPricesBuilder/StockPricesBuilder";
+
 import ProfitOptimizer from "../ProfitOptimizer";
 
-import TransactionsBuilder from "../TransactionsBuilder/TransactionsBuilder";
+import TransactionsBuilder from "../../Helpers/TransactionsBuilder/TransactionsBuilder";
 
 describe("Profit Optimizer", () => {
   it("should return a null result if given an empty array", () => {
@@ -23,7 +23,7 @@ describe("Profit Optimizer", () => {
   it("should return a null result if given an array with a single value", () => {
     // given
     const prices: DailyStockPrice[] = [
-      DailyStockPriceBuilder("GOOGLE", 1641186000000, 600, 600),
+      StockPricesBuilder.buildPoint("GOOGLE", 1641186000000, 600, 600),
     ];
 
     // when
@@ -38,7 +38,7 @@ describe("Profit Optimizer", () => {
 
   it("should return a null result if given an array of descending prices", () => {
     // given
-    const prices: DailyStockPrice[] = StockPricesBuilder("GOOGLE", [
+    const prices: DailyStockPrice[] = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 100, 100],
@@ -58,7 +58,7 @@ describe("Profit Optimizer", () => {
 
   it("should return a null result if given an array of constant prices", () => {
     // given
-    const prices: DailyStockPrice[] = StockPricesBuilder("GOOGLE", [
+    const prices: DailyStockPrice[] = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 600, 600],
       [1641358800000, 600, 600],
@@ -78,7 +78,7 @@ describe("Profit Optimizer", () => {
 
   it("should throw an error if given a negative price", () => {
     // given
-    const prices: DailyStockPrice[] = StockPricesBuilder("GOOGLE", [
+    const prices: DailyStockPrice[] = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, -110, 110],
       [1641358800000, 100, 100],
@@ -99,7 +99,7 @@ describe("Profit Optimizer", () => {
 
   it("should throw an error if given a highest price smaller than the lowest price", () => {
     // given
-    const prices: DailyStockPrice[] = StockPricesBuilder("GOOGLE", [
+    const prices: DailyStockPrice[] = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 120, 110],
       [1641358800000, 100, 100],
@@ -122,7 +122,7 @@ describe("Profit Optimizer", () => {
 
   it("should return a result from the first and last prices if given an array of ascending prices", () => {
     // given
-    const prices: DailyStockPrice[] = StockPricesBuilder("GOOGLE", [
+    const prices: DailyStockPrice[] = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 50, 50],
       [1641272400000, 80, 80],
       [1641358800000, 100, 100],
@@ -146,7 +146,7 @@ describe("Profit Optimizer", () => {
 
   it("it should not pick a max price that precedes the min price", () => {
     // when
-    const prices = StockPricesBuilder("GOOGLE", [
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 164, 164],
@@ -169,7 +169,7 @@ describe("Profit Optimizer", () => {
 
   it("it should not pick the first min value it encounters", () => {
     // when
-    const prices = StockPricesBuilder("GOOGLE", [
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 164, 164],
@@ -195,7 +195,7 @@ describe("Profit Optimizer", () => {
 
   it("should not pick the first max value it encounters", () => {
     // when
-    const prices = StockPricesBuilder("GOOGLE", [
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 50, 50],
       [1641358800000, 164, 164],
@@ -221,7 +221,7 @@ describe("Profit Optimizer", () => {
 
   it("should handle random prices", () => {
     // when
-    const prices = StockPricesBuilder("GOOGLE", [
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 445, 445],
       [1641272400000, 36, 36],
       [1641358800000, 164, 164],
@@ -247,8 +247,8 @@ describe("Profit Optimizer", () => {
 });
 
 describe("find buy and sell indexes", () => {
-  it("it should find the optimal solution when the global max is the first", () => {
-    const prices = StockPricesBuilder("GOOGLE", [
+  it("it should find the indexes for the optimal solution when the global max is the first", () => {
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 164, 164],
@@ -263,8 +263,8 @@ describe("find buy and sell indexes", () => {
     );
   });
 
-  it("should pass 2", () => {
-    const prices = StockPricesBuilder("GOOGLE", [
+  it("it should find the indexes for the optimal solution when the first min ids the not optimal", () => {
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 164, 164],
@@ -281,8 +281,8 @@ describe("find buy and sell indexes", () => {
     );
   });
 
-  it("should pass 3", () => {
-    const prices = StockPricesBuilder("GOOGLE", [
+  it("it should return a null result when the prices are descending", () => {
+    const prices = StockPricesBuilder.buildSeries("GOOGLE", [
       [1641186000000, 600, 600],
       [1641272400000, 110, 110],
       [1641358800000, 100, 100],

@@ -41,7 +41,6 @@ const useGetCompaniesList = (): {
 
   useEffect(() => {
     if (isServerCallLoading && !firstCallHandled.current) {
-      console.log("FIRED USE EFFECT");
       firstCallHandled.current = true;
       fetchCompaniesList();
     }
